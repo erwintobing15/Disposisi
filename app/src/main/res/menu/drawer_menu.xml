@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single"
+        android:id="@+id/group1">
+        <item android:id="@+id/nav_home"
+            android:icon="@drawable/ic_dashboard"
+            android:title="Beranda">
+        </item>
+        <item android:id="@+id/nav_transaksi"
+            android:icon="@drawable/ic_transaksi"
+            android:title="Transaksi Surat">
+        </item>
+<!--        <item android:id="@+id/nav_buku_agenda"-->
+<!--            android:icon="@drawable/ic_buku_agenda"-->
+<!--            android:title="Buku Agenda">-->
+<!--        </item>-->
+<!--        <item android:id="@+id/nav_galeri_file"-->
+<!--            android:icon="@drawable/ic_galeri_file"-->
+<!--            android:title="Galeri File">-->
+<!--        </item>-->
+        <item android:id="@+id/nav_referensi"
+            android:icon="@drawable/ic_referensi"
+            android:title="Referensi">
+        </item>
+    </group>
+
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group2">
+        <item android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Log Out">
+        </item>
+    </group>
+
+</menu>

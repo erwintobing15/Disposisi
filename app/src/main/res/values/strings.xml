@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Manajemen Persuratan</string>
+    <string name="nav_dashboard">Beranda</string>
+    <string name="nav_transaksi">Transaksi Surat</string>
+    <string name="nav_agenda">Buku Agenda</string>
+    <string name="nav_galeri">Galeri File</string>
+    <string name="nav_referensi">Referensi</string>
+
+    <string name="title_activity_navigation">Navigation</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string-array name="jenis_surat">
+        <item>Surat Masuk</item>
+        <item>Surat Keluar</item>
+        <item>Surat Pengantar Keluar</item>
+        <item>Surat Undangan Masuk</item>
+        <item>Surat Perintah</item>
+        <item>Surat Keputusan</item>
+        <item>Nodin</item>
+        <item>Perjanjian Kerjasama</item>
+        <item>Agenda MOU</item>
+        <item>SPTJM</item>
+        <item>BAST</item>
+        <item>Surat Keterangan</item>
+    </string-array>
+</resources>

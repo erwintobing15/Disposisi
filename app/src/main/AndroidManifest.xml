@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.erwintobing15.disposisi">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".ui.transaksi.InsertSumasukActivity" />
+        <activity android:name=".ui.transaksi.InsertSpkeluarActivity" />
+        <activity android:name=".ui.transaksi.InsertSuratKeluarActivity" />
+        <activity android:name=".ui.referensi.InsertReferensiActivity" />
+        <activity android:name=".ui.transaksi.InsertSuratMasukActivity" />
+        <activity android:name=".ui.transaksi.InsertSuratPerintahActivity" />
+        <activity android:name=".ui.transaksi.InsertSuratKeputusanActivity" />
+        <activity android:name=".ui.transaksi.InsertNodinActivity" />
+        <activity android:name=".ui.transaksi.InsertPerjanjianKerjasamaActivity" />
+        <activity android:name=".ui.transaksi.InsertAgendaMouActivity" />
+        <activity android:name=".ui.transaksi.InsertSptjmActivity" />
+        <activity android:name=".ui.transaksi.InsertBastActivity" />
+        <activity android:name=".ui.transaksi.InsertSuratKeteranganActivity" />
+
+        <activity android:name=".ui.transaksi.UpdateSuratMasukActivity" />
+        <activity android:name=".ui.transaksi.UpdateSuratKeluarActivity" />
+        <activity android:name=".ui.transaksi.UpdateSumasukActivity" />
+        <activity android:name=".ui.transaksi.UpdateSpkeluarActivity" />
+        <activity android:name=".ui.transaksi.UpdateSuratPerintahActivity" />
+        <activity android:name=".ui.transaksi.UpdateSuratKeputusanActivity" />
+        <activity android:name=".ui.transaksi.UpdateNodinActivity" />
+        <activity android:name=".ui.transaksi.UpdatePerjanjianKerjasamaActivity" />
+        <activity android:name=".ui.transaksi.UpdateAgendaMouActivity" />
+        <activity android:name=".ui.transaksi.UpdateSptjmActivity" />
+        <activity android:name=".ui.transaksi.UpdateBastActivity" />
+        <activity android:name=".ui.transaksi.UpdateSuratKeteranganActivity" />
+        <activity android:name=".ui.referensi.UpdateReferensiActivity" />
+
+        <activity android:name=".ui.referensi.ReferensiActivity" />
+        <activity android:name=".ui.galeri.GaleriActivity" />
+        <activity android:name=".ui.agenda.AgendaActivity" />
+        <activity android:name=".ui.transaksi.TransaksiActivity" />
+        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
