@@ -409,20 +409,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     private void loadAllTsuratmasuk() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratMasukModel.SuratMasukDataModel> call = APIService.Factory.create().allSuratMasuk(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratMasukModel.SuratMasukDataModel>() {
             @Override
             public void onResponse(Call<SuratMasukModel.SuratMasukDataModel> call, Response<SuratMasukModel.SuratMasukDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter1.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratMasukModel.SuratMasukDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -463,7 +463,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                 dialog.dismiss();
                 // Build an Alert Dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
-                builder.setTitle("Hapus Surat Masuk");
+                builder.setTitle("Hapus Surat");
                 builder.setMessage("Apakah anda yakin ingin menghapus surat?");
                 builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     @Override
@@ -530,20 +530,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     private void loadAllTsuratkeluar() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratKeluarModel.SuratKeluarDataModel> call = APIService.Factory.create().allSuratKeluar(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratKeluarModel.SuratKeluarDataModel>() {
             @Override
             public void onResponse(Call<SuratKeluarModel.SuratKeluarDataModel> call, Response<SuratKeluarModel.SuratKeluarDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter2.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratKeluarModel.SuratKeluarDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -652,20 +652,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     private void loadAllTspkeluar() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SPKeluarModel.SPKeluarDataModel> call = APIService.Factory.create().allSPKeluar(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SPKeluarModel.SPKeluarDataModel>() {
             @Override
             public void onResponse(Call<SPKeluarModel.SPKeluarDataModel> call, Response<SPKeluarModel.SPKeluarDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter3.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SPKeluarModel.SPKeluarDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -774,20 +774,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     private void loadAllTsumasuk() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SUMasukModel.SUMasukDataModel> call = APIService.Factory.create().allSUMasuk(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SUMasukModel.SUMasukDataModel>() {
             @Override
             public void onResponse(Call<SUMasukModel.SUMasukDataModel> call, Response<SUMasukModel.SUMasukDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter4.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SUMasukModel.SUMasukDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -897,20 +897,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     private void loadAllTsuratperintah() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allSuratPerintah(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
             @Override
             public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter5.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -934,20 +934,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     private void loadAllTsuratkeputusan() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allSuratKeputusan(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
             @Override
             public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter5.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -959,20 +959,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
      */
 
     private void loadAllTnodin() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allNodin(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
             @Override
             public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter5.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -984,20 +984,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
      */
 
     private void loadAllTperjanjiankerjasama() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allPerjanjianKerjasama(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
             @Override
             public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter5.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -1009,20 +1009,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
      */
 
     private void loadAllTagendamou() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allAgendaMou(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
             @Override
             public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter5.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -1034,20 +1034,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
      */
 
     private void loadAllTsptjm() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allSptjm(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
             @Override
             public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter5.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -1059,20 +1059,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
      */
 
     private void loadAllTbast() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allBast(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
             @Override
             public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter5.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -1084,20 +1084,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
      */
 
     private void loadAllTsuratketerangan() {
-        progressBar.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
         Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allSuratKeterangan(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
         call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
             @Override
             public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter5.replaceData(response.body().getResults());
             }
             @Override
             public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -1220,7 +1220,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                     case "Surat Keterangan":
                         dialog.dismiss();
                         Call<MessageModel> call8 = APIService.Factory.create().postdeleteSuratKeterangan(id);
-                        deleteBast(call8);
+                        deleteSuratKeterangan(call8);
                         break;
                 }
 

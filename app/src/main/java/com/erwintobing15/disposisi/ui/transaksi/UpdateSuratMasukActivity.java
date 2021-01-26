@@ -86,7 +86,7 @@ public class UpdateSuratMasukActivity extends AppCompatActivity implements Image
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_surat_masuk);
-        progressDialog = ProgressDialog.show(UpdateSuratMasukActivity.this, "", "Load Data.....", true, false);
+        progressDialog = ProgressDialog.show(UpdateSuratMasukActivity.this, "", "Load data.....", true, false);
 
         initViews();
         initUtils();
