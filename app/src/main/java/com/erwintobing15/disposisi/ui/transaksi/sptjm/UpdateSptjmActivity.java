@@ -1,4 +1,4 @@
-package com.erwintobing15.disposisi.ui.transaksi;
+package com.erwintobing15.disposisi.ui.transaksi.sptjm;
 
 import android.Manifest;
 import android.app.Activity;
@@ -27,12 +27,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
+import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.MessageModel;
+import com.erwintobing15.disposisi.model.SelectSuratLainModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.util.FileUtil;
 import com.erwintobing15.disposisi.util.Imageutils;
-import com.erwintobing15.disposisi.util.SessionUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InsertAgendaMouActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
+public class UpdateSptjmActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
 
     private EditText editTextNoAgenda;
     private EditText editTextTujuan;
@@ -82,16 +85,22 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insert_surat_lain);
+        setContentView(R.layout.activity_update_surat_lain);
+        progressDialog = ProgressDialog.show(UpdateSptjmActivity.this, "", "Load Data.....", true, false);
 
         initViews();
         initUtils();
         initToolbar();
+
+        Bundle dataExtra = getIntent().getExtras();
+        final String id = dataExtra.getString("id");    // get id from intent extra
+
+        loadViews(id);
         initListeners();
     }
 
     /**
-     * Initialize views, toolbar, listener
+     * Initialize views, toolbar, listener, utils
      *
      */
 
@@ -103,7 +112,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
         editTextKet = findViewById(R.id.et_insert_keterangan);
         textViewTanggal = findViewById(R.id.tv_insert_tanggal_surat);
         imageViewPilihTanggal = findViewById(R.id.iv_insert_calender);
-        toolbar = findViewById(R.id.insert_surat_lain_toolbar);
+        toolbar = findViewById(R.id.update_surat_lain_toolbar);
         buttonPilihGambar = findViewById(R.id.btn_insert_image);
         buttonPilihPdf = findViewById(R.id.btn_insert_pdf);
         buttonPilihDocx = findViewById(R.id.btn_insert_docx);
@@ -115,7 +124,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
 
     private void initToolbar() {
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Tambah Agenda MOU");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Ubah Agenda MOU");
         toolbar.setTitleTextColor(Color.WHITE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -134,11 +143,50 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
     }
 
     /**
-     * Save Agenda MOU data on button clicked
+     * Load view of given id from intent extra
+     *
+     * @param id
+     */
+
+    private void loadViews(String id) {
+
+        Call<SelectSuratLainModel> call = APIService.Factory.create().oneSptjm(id);
+        call.enqueue(new Callback<SelectSuratLainModel>() {
+            @Override
+            public void onResponse(Call<SelectSuratLainModel> call, Response<SelectSuratLainModel> response) {
+                progressDialog.dismiss();
+                editTextNoAgenda.setText(response.body().getNo_agenda());
+                editTextTujuan.setText(response.body().getTujuan());
+                editTextNoSurat.setText(response.body().getNo_surat());
+                editTextIsi.setText(response.body().getIsi());
+                editTextKet.setText(response.body().getKeterangan());
+                textViewTanggal.setText(response.body().getTgl_surat());
+                textViewPfd.setText(response.body().getFile());
+
+                // load images
+                imageViewFoto.setVisibility(View.VISIBLE);
+                Glide.with(UpdateSptjmActivity.this)
+                        .load(Constants.IMAGES_URL+"surat_lain/"+response.body().getFile())
+                        .apply(new RequestOptions().error(R.drawable.doc))
+                        .into(imageViewFoto);
+            }
+
+            @Override
+            public void onFailure(Call<SelectSuratLainModel> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(UpdateSptjmActivity.this, "Koneksi gagal", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * Save surat masuk data on button clicked
      *
      */
 
-    private void saveAgendaMou() {
+    private void updateSptjm() {
+        Bundle dataExtra = getIntent().getExtras();
+        final String id = dataExtra.getString("id");
 
         String noAgenda = editTextNoAgenda.getText().toString();
         String tujuan = editTextTujuan.getText().toString();
@@ -147,33 +195,31 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
         String tglSurat = textViewTanggal.getText().toString();
         String ket = editTextKet.getText().toString();
 
-        final String idUser = SessionUtils.getLoggedUser(InsertAgendaMouActivity.this).getId();
-
+        RequestBody requestBodyId = RequestBody.create(MediaType.parse("text/plain"), id);
         RequestBody requestBodyNoAgenda = RequestBody.create(MediaType.parse("text/plain"), noAgenda);
         RequestBody requestBodyTujuan = RequestBody.create(MediaType.parse("text/plain"), tujuan);
         RequestBody requestBodyNoSurat = RequestBody.create(MediaType.parse("text/plain"), noSurat);
         RequestBody requestBodyIsi = RequestBody.create(MediaType.parse("text/plain"), isi);
         RequestBody requestBodyTanggalSurat = RequestBody.create(MediaType.parse("text/plain"), tglSurat);
         RequestBody requestBodyKeterangan = RequestBody.create(MediaType.parse("text/plain"), ket);
-        RequestBody requestBodyIdUser = RequestBody.create(MediaType.parse("text/plain"), idUser);
 
         if (noAgenda.isEmpty() || tujuan.isEmpty() || noSurat.isEmpty() || isi.isEmpty() || tglSurat.isEmpty() || ket.isEmpty()) {
 
             progressDialog.dismiss();
-            Toast.makeText(InsertAgendaMouActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateSptjmActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
 
         } else {
 
             if (fileImage==null && filePdf==null && fileDocx==null) {
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertAgendaMou(requestBodyNoAgenda, requestBodyTujuan,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, null);
+                Call<MessageModel> call = APIService.Factory.create().updateSptjm(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  null);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertAgendaMouActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSptjmActivity.this, "Berhasil mengubah, silahkan refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -181,7 +227,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertAgendaMouActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSptjmActivity.this, "Berhasil mengubah, silahkan refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -193,14 +239,14 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileImage);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileImage.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertAgendaMou(requestBodyNoAgenda, requestBodyTujuan,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
+                Call<MessageModel> call = APIService.Factory.create().updateSptjm(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertAgendaMouActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSptjmActivity.this, "Berhasil mengubah, silahkan refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -208,7 +254,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertAgendaMouActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSptjmActivity.this, "Berhasil mengubah, silahkan refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -220,14 +266,14 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/pdf"), filePdf);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", filePdf.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertAgendaMou(requestBodyNoAgenda, requestBodyTujuan,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
+                Call<MessageModel> call = APIService.Factory.create().updateSptjm(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertAgendaMouActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSptjmActivity.this, "Berhasil mengubah, silahkan refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -235,7 +281,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertAgendaMouActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSptjmActivity.this, "Berhasil mengubah, silahkan refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -246,14 +292,14 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), fileDocx);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileDocx.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertAgendaMou(requestBodyNoAgenda, requestBodyTujuan,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
+                Call<MessageModel> call = APIService.Factory.create().updateSptjm(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertAgendaMouActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSptjmActivity.this, "Berhasil mengubah, silahkan refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -261,7 +307,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertAgendaMouActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSptjmActivity.this, "Berhasil mengubah, silahkan refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -272,7 +318,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
     }
 
     /**
-     * Images, pdf, and docs picker
+     * Pdf, docx and image file picker
      *
      */
 
@@ -293,8 +339,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
     }
 
     /**
-     * Back from insert surat pengantar keluar view
-     *
+     * Toolbar back button
      * @param item
      * @return
      */
@@ -315,10 +360,10 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
      */
 
     public boolean checkPermission(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(InsertAgendaMouActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(UpdateSptjmActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
 
             // Requesting the permission
-            ActivityCompat.requestPermissions(InsertAgendaMouActivity.this,
+            ActivityCompat.requestPermissions(UpdateSptjmActivity.this,
                     new String[] { permission },
                     requestCode);
             return false;
@@ -348,7 +393,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
             Uri uri = data.getData();
 
             try {
-                filePdf = FileUtil.from(InsertAgendaMouActivity.this, uri);
+                filePdf = FileUtil.from(UpdateSptjmActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+filePdf .getPath()+" file -" + filePdf + " : " + filePdf .exists());
 
             } catch (IOException e) {
@@ -364,7 +409,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
             Uri uri = data.getData();
 
             try {
-                fileDocx = FileUtil.from(InsertAgendaMouActivity.this, uri);
+                fileDocx = FileUtil.from(UpdateSptjmActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+fileDocx .getPath()+" file -" + fileDocx + " : " + fileDocx .exists());
 
             } catch (IOException e) {
@@ -395,13 +440,13 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
         if (requestCode == PDF_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(InsertAgendaMouActivity.this,
+                Toast.makeText(UpdateSptjmActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(InsertAgendaMouActivity.this,
+                Toast.makeText(UpdateSptjmActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -411,13 +456,13 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
         if (requestCode == DOCX_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(InsertAgendaMouActivity.this,
+                Toast.makeText(UpdateSptjmActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(InsertAgendaMouActivity.this,
+                Toast.makeText(UpdateSptjmActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -444,7 +489,7 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
     }
 
     /**
-     * All onclick handler
+     * All this class onclick listener handler
      *
      * @param v
      */
@@ -490,8 +535,8 @@ public class InsertAgendaMouActivity extends AppCompatActivity implements Imageu
         }
 
         if (v == buttonSimpan) {
-            progressDialog = ProgressDialog.show(InsertAgendaMouActivity.this, "", "Menyimpan.....", true, true);
-            saveAgendaMou();
+            progressDialog = ProgressDialog.show(UpdateSptjmActivity.this, "", "Menyimpan.....", true, true);
+            updateSptjm();
         }
 
         if (v == buttonBatal) {

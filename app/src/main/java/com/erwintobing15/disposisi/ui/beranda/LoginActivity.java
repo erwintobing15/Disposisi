@@ -1,4 +1,4 @@
-package com.erwintobing15.disposisi.ui;
+package com.erwintobing15.disposisi.ui.beranda;
 
 import android.app.ProgressDialog;
 import android.content.Intent;

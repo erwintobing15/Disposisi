@@ -1,4 +1,4 @@
-package com.erwintobing15.disposisi.ui.transaksi;
+package com.erwintobing15.disposisi.ui.transaksi.sptjm;
 
 import android.Manifest;
 import android.app.Activity;

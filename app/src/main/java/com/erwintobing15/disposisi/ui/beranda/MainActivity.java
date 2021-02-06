@@ -1,4 +1,4 @@
-package com.erwintobing15.disposisi.ui;
+package com.erwintobing15.disposisi.ui.beranda;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,9 +24,7 @@ import com.erwintobing15.disposisi.model.SuratLainModel;
 import com.erwintobing15.disposisi.model.SuratMasukModel;
 import com.erwintobing15.disposisi.model.UserModel;
 import com.erwintobing15.disposisi.network.APIService;
-import com.erwintobing15.disposisi.ui.galeri.GaleriActivity;
 import com.erwintobing15.disposisi.ui.referensi.ReferensiActivity;
-import com.erwintobing15.disposisi.ui.referensi.UpdateReferensiActivity;
 import com.erwintobing15.disposisi.ui.transaksi.TransaksiActivity;
 import com.erwintobing15.disposisi.util.SessionUtils;
 import com.google.android.material.navigation.NavigationView;
@@ -149,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_dashboard, R.string.nav_dashboard);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorAccent));
+        actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
         actionBarDrawerToggle.syncState();
     }
 

@@ -1,8 +1,4 @@
-package com.erwintobing15.disposisi.ui.transaksi;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+package com.erwintobing15.disposisi.ui.transaksi.nodin;
 
 import android.Manifest;
 import android.app.Activity;
@@ -23,16 +19,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
+import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.MessageModel;
+import com.erwintobing15.disposisi.model.SelectSuratLainModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.util.FileUtil;
 import com.erwintobing15.disposisi.util.Imageutils;
-import com.erwintobing15.disposisi.util.SessionUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,14 +49,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InsertSuratMasukActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener{
+public class UpdateNodinActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
 
     private EditText editTextNoAgenda;
-    private EditText editTextAsal;
+    private EditText editTextTujuan;
     private EditText editTextNoSurat;
     private EditText editTextIsi;
-    private EditText editTextKode;
-    private EditText editTextIndeks;
     private EditText editTextKet;
     private TextView textViewTanggal;
 
@@ -71,6 +72,7 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
     private Imageutils imageutils;
     private ImageView imageViewFoto;
     private TextView textViewPfd;
+
     private File fileImage;
     private File filePdf;
     private File fileDocx;
@@ -81,43 +83,48 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
     private static final int DOCX_STORAGE_PERMISSION_CODE = 102;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insert_surat_masuk);
+        setContentView(R.layout.activity_update_surat_lain);
+        progressDialog = ProgressDialog.show(UpdateNodinActivity.this, "", "Load Data.....", true, false);
 
         initViews();
         initUtils();
         initToolbar();
+
+        Bundle dataExtra = getIntent().getExtras();
+        final String id = dataExtra.getString("id");    // get id from intent extra
+
+        loadViews(id);
         initListeners();
     }
 
+    /**
+     * Initialize views, toolbar, listener, utils
+     *
+     */
+
     private void initViews() {
         editTextNoAgenda = findViewById(R.id.et_insert_nomor_agenda);
-        editTextAsal = findViewById(R.id.et_insert_asal_surat);
+        editTextTujuan = findViewById(R.id.et_insert_tujuan);
         editTextNoSurat = findViewById(R.id.et_insert_nomor_surat);
         editTextIsi = findViewById(R.id.et_insert_isi);
-        editTextKode = findViewById(R.id.et_insert_kode);
-        editTextIndeks = findViewById(R.id.et_insert_indeks);
         editTextKet = findViewById(R.id.et_insert_keterangan);
         textViewTanggal = findViewById(R.id.tv_insert_tanggal_surat);
-        imageViewPilihTanggal = findViewById(R.id.iv_insert_suratmasuk_calender);
-        toolbar = findViewById(R.id.insert_surat_masuk_toolbar);
-        buttonSimpan = findViewById(R.id.btn_insert_surat_masuk_simpan);
-        buttonBatal = findViewById(R.id.btn_insert_surat_masuk_batal);
-        buttonPilihGambar = findViewById(R.id.btn_insert_surat_masuk_image);
-        buttonPilihPdf = findViewById(R.id.btn_insert_surat_masuk_pdf);
-        buttonPilihDocx = findViewById(R.id.btn_insert_surat_masuk_docx);
-        imageViewFoto = findViewById(R.id.iv_insert_surat_masuk_image);
-        textViewPfd = findViewById(R.id.tv_surat_masuk_pdf);
-    }
-
-    private void initUtils() {
-        imageutils = new Imageutils(this);
+        imageViewPilihTanggal = findViewById(R.id.iv_insert_calender);
+        toolbar = findViewById(R.id.update_surat_lain_toolbar);
+        buttonPilihGambar = findViewById(R.id.btn_insert_image);
+        buttonPilihPdf = findViewById(R.id.btn_insert_pdf);
+        buttonPilihDocx = findViewById(R.id.btn_insert_docx);
+        imageViewFoto = findViewById(R.id.iv_surat_image);
+        textViewPfd = findViewById(R.id.tv_file_name);
+        buttonSimpan = findViewById(R.id.btn_simpan);
+        buttonBatal = findViewById(R.id.btn_batal);
     }
 
     private void initToolbar() {
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Tambah Surat Masuk");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Ubah Nodin");
         toolbar.setTitleTextColor(Color.WHITE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -131,49 +138,88 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
         buttonPilihDocx.setOnClickListener(this);
     }
 
-    // save button event handler
-    private void saveSuratMasuk() {
+    private void initUtils() {
+        imageutils = new Imageutils(this);
+    }
+
+    /**
+     * Load view of given id from intent extra
+     *
+     * @param id
+     */
+
+    private void loadViews(String id) {
+
+        Call<SelectSuratLainModel> call = APIService.Factory.create().oneNodin(id);
+        call.enqueue(new Callback<SelectSuratLainModel>() {
+            @Override
+            public void onResponse(Call<SelectSuratLainModel> call, Response<SelectSuratLainModel> response) {
+                progressDialog.dismiss();
+                editTextNoAgenda.setText(response.body().getNo_agenda());
+                editTextTujuan.setText(response.body().getTujuan());
+                editTextNoSurat.setText(response.body().getNo_surat());
+                editTextIsi.setText(response.body().getIsi());
+                editTextKet.setText(response.body().getKeterangan());
+                textViewTanggal.setText(response.body().getTgl_surat());
+                textViewPfd.setText(response.body().getFile());
+
+                // load images
+                imageViewFoto.setVisibility(View.VISIBLE);
+                Glide.with(UpdateNodinActivity.this)
+                        .load(Constants.IMAGES_URL+"surat_lain/"+response.body().getFile())
+                        .apply(new RequestOptions().error(R.drawable.doc))
+                        .into(imageViewFoto);
+            }
+
+            @Override
+            public void onFailure(Call<SelectSuratLainModel> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(UpdateNodinActivity.this, "Koneksi gagal", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * Save surat masuk data on button clicked
+     *
+     */
+
+    private void saveNodin() {
+        Bundle dataExtra = getIntent().getExtras();
+        final String id = dataExtra.getString("id");
 
         String noAgenda = editTextNoAgenda.getText().toString();
-        String asalSurat = editTextAsal.getText().toString();
+        String tujuan = editTextTujuan.getText().toString();
         String noSurat = editTextNoSurat.getText().toString();
         String isi = editTextIsi.getText().toString();
-        String kode = editTextKode.getText().toString();
-        String indeks = editTextIndeks.getText().toString();
         String tglSurat = textViewTanggal.getText().toString();
         String ket = editTextKet.getText().toString();
 
-        final String idUser = SessionUtils.getLoggedUser(InsertSuratMasukActivity.this).getId();
-
+        RequestBody requestBodyId = RequestBody.create(MediaType.parse("text/plain"), id);
         RequestBody requestBodyNoAgenda = RequestBody.create(MediaType.parse("text/plain"), noAgenda);
-        RequestBody requestBodyAsalSurat = RequestBody.create(MediaType.parse("text/plain"), asalSurat);
+        RequestBody requestBodyTujuan = RequestBody.create(MediaType.parse("text/plain"), tujuan);
         RequestBody requestBodyNoSurat = RequestBody.create(MediaType.parse("text/plain"), noSurat);
         RequestBody requestBodyIsi = RequestBody.create(MediaType.parse("text/plain"), isi);
-        RequestBody requestBodyKode = RequestBody.create(MediaType.parse("text/plain"), kode);
-        RequestBody requestBodyIndeks = RequestBody.create(MediaType.parse("text/plain"), indeks);
         RequestBody requestBodyTanggalSurat = RequestBody.create(MediaType.parse("text/plain"), tglSurat);
         RequestBody requestBodyKeterangan = RequestBody.create(MediaType.parse("text/plain"), ket);
-        RequestBody requestBodyIdUser = RequestBody.create(MediaType.parse("text/plain"), idUser);
 
-        if (noAgenda.isEmpty() || asalSurat.isEmpty() || noSurat.isEmpty() || isi.isEmpty() ||
-                kode.isEmpty() || indeks.isEmpty() || tglSurat.isEmpty() || ket.isEmpty()) {
+        if (noAgenda.isEmpty() || tujuan.isEmpty() || noSurat.isEmpty() || isi.isEmpty() || tglSurat.isEmpty() || ket.isEmpty()) {
 
             progressDialog.dismiss();
-            Toast.makeText(InsertSuratMasukActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateNodinActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
 
         } else {
 
             if (fileImage==null && filePdf==null && fileDocx==null) {
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertSuratMasuk(requestBodyNoAgenda, requestBodyAsalSurat,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyKode, requestBodyIndeks,
-                        requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, null);
+                Call<MessageModel> call = APIService.Factory.create().updateNodin(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  null);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertSuratMasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateNodinActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -181,7 +227,7 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertSuratMasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateNodinActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -193,15 +239,14 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileImage);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileImage.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertSuratMasuk(requestBodyNoAgenda, requestBodyAsalSurat,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyKode, requestBodyIndeks,
-                        requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
+                Call<MessageModel> call = APIService.Factory.create().updateNodin(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertSuratMasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateNodinActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -209,7 +254,7 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertSuratMasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateNodinActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -221,15 +266,14 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/pdf"), filePdf);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", filePdf.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertSuratMasuk(requestBodyNoAgenda, requestBodyAsalSurat,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyKode, requestBodyIndeks,
-                        requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
+                Call<MessageModel> call = APIService.Factory.create().updateNodin(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertSuratMasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateNodinActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -237,7 +281,7 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertSuratMasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateNodinActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -248,15 +292,14 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), fileDocx);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileDocx.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertSuratMasuk(requestBodyNoAgenda, requestBodyAsalSurat,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyKode, requestBodyIndeks,
-                        requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
+                Call<MessageModel> call = APIService.Factory.create().updateNodin(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertSuratMasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateNodinActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -264,7 +307,7 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertSuratMasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateNodinActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -274,14 +317,13 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
         }
     }
 
+    /**
+     * Pdf, docx and image file picker
+     *
+     */
+
     private void loadPdf()
     {
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.setType("application/pdf");
-////        i.setType("application/pdf|application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-////        intent.setType("application/pdf");
-//        startActivityForResult(Intent.createChooser(intent,"select file"), STORAGE_PERMISSION_CODE);
-
         Intent intent = new Intent();
         intent.setType("application/pdf");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -296,6 +338,12 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
         startActivityForResult(Intent.createChooser(intent,"select file"), DOCX_STORAGE_PERMISSION_CODE);
     }
 
+    /**
+     * Toolbar back button
+     * @param item
+     * @return
+     */
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -306,13 +354,16 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
         return super.onOptionsItemSelected(item);
     }
 
-    // Function to check and request permission.
-    public boolean checkPermission(String permission, int requestCode)
-    {
-        if (ContextCompat.checkSelfPermission(InsertSuratMasukActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
+    /**
+     * Checking permission
+     *
+     */
+
+    public boolean checkPermission(String permission, int requestCode) {
+        if (ContextCompat.checkSelfPermission(UpdateNodinActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
 
             // Requesting the permission
-            ActivityCompat.requestPermissions(InsertSuratMasukActivity.this,
+            ActivityCompat.requestPermissions(UpdateNodinActivity.this,
                     new String[] { permission },
                     requestCode);
             return false;
@@ -322,17 +373,27 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
         }
     }
 
+    /**
+     * Filepicker activity result
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // pdf file picker
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // pdf file handler
         if (requestCode == PDF_STORAGE_PERMISSION_CODE && resultCode == RESULT_OK && data != null) {
 
             Uri uri = data.getData();
 
             try {
-                filePdf = FileUtil.from(InsertSuratMasukActivity.this, uri);
+                filePdf = FileUtil.from(UpdateNodinActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+filePdf .getPath()+" file -" + filePdf + " : " + filePdf .exists());
 
             } catch (IOException e) {
@@ -342,13 +403,13 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
             textViewPfd.setText(filePdf.getName());
         }
 
-        // docx file picker
+        // docx file handler
         if (requestCode == DOCX_STORAGE_PERMISSION_CODE && resultCode == RESULT_OK && data != null) {
 
             Uri uri = data.getData();
 
             try {
-                fileDocx = FileUtil.from(InsertSuratMasukActivity.this, uri);
+                fileDocx = FileUtil.from(UpdateNodinActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+fileDocx .getPath()+" file -" + fileDocx + " : " + fileDocx .exists());
 
             } catch (IOException e) {
@@ -358,24 +419,34 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
             textViewPfd.setText(fileDocx.getName());
         }
 
-        // image file picker
+        // image file handler
         imageutils.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Permission result
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         imageutils.request_permission_result(requestCode, permissions, grantResults);
 
         if (requestCode == PDF_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(InsertSuratMasukActivity.this,
+                Toast.makeText(UpdateNodinActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(InsertSuratMasukActivity.this,
+                Toast.makeText(UpdateNodinActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -385,19 +456,28 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
         if (requestCode == DOCX_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(InsertSuratMasukActivity.this,
+                Toast.makeText(UpdateNodinActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(InsertSuratMasukActivity.this,
+                Toast.makeText(UpdateNodinActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
             }
         }
     }
+
+    /**
+     * Display image if not empty
+     *
+     * @param from
+     * @param filename
+     * @param file
+     * @param uri
+     */
 
     @Override
     public void image_attachment(int from, String filename, Bitmap file, Uri uri) {
@@ -408,8 +488,15 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
         fileImage = new File(path);
     }
 
+    /**
+     * All this class onclick listener handler
+     *
+     * @param v
+     */
+
     @Override
     public void onClick(View v) {
+
         if (v == imageViewPilihTanggal) {
             // Get Current Date
             final Calendar c = Calendar.getInstance();
@@ -439,7 +526,6 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
             if (checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, PDF_STORAGE_PERMISSION_CODE)) {
                 loadPdf();
             }
-//            loadPdf();
         }
 
         if (v == buttonPilihDocx) {
@@ -449,13 +535,13 @@ public class InsertSuratMasukActivity extends AppCompatActivity implements Image
         }
 
         if (v == buttonSimpan) {
-            progressDialog = ProgressDialog.show(InsertSuratMasukActivity.this, "", "Menyimpan.....", true, true);
-            saveSuratMasuk();
+            progressDialog = ProgressDialog.show(UpdateNodinActivity.this, "", "Menyimpan.....", true, true);
+            saveNodin();
         }
 
         if (v == buttonBatal) {
             finish();
         }
-    }
 
+    }
 }

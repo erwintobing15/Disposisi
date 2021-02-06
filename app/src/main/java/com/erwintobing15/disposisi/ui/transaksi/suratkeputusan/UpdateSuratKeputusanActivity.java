@@ -1,4 +1,4 @@
-package com.erwintobing15.disposisi.ui.transaksi;
+package com.erwintobing15.disposisi.ui.transaksi.suratkeputusan;
 
 import android.Manifest;
 import android.app.Activity;
@@ -49,7 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
+public class UpdateSuratKeputusanActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
 
     private EditText editTextNoAgenda;
     private EditText editTextTujuan;
@@ -86,7 +86,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_surat_lain);
-        progressDialog = ProgressDialog.show(UpdatePerjanjianKerjasamaActivity.this, "", "Load Data.....", true, false);
+        progressDialog = ProgressDialog.show(UpdateSuratKeputusanActivity.this, "", "Load Data.....", true, false);
 
         initViews();
         initUtils();
@@ -124,7 +124,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
 
     private void initToolbar() {
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Ubah Perjanjian Kerjasama");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Ubah Surat Keputusan");
         toolbar.setTitleTextColor(Color.WHITE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -150,7 +150,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
 
     private void loadViews(String id) {
 
-        Call<SelectSuratLainModel> call = APIService.Factory.create().onePerjanjianKerjasama(id);
+        Call<SelectSuratLainModel> call = APIService.Factory.create().oneSuratKeputusan(id);
         call.enqueue(new Callback<SelectSuratLainModel>() {
             @Override
             public void onResponse(Call<SelectSuratLainModel> call, Response<SelectSuratLainModel> response) {
@@ -165,7 +165,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
 
                 // load images
                 imageViewFoto.setVisibility(View.VISIBLE);
-                Glide.with(UpdatePerjanjianKerjasamaActivity.this)
+                Glide.with(UpdateSuratKeputusanActivity.this)
                         .load(Constants.IMAGES_URL+"surat_lain/"+response.body().getFile())
                         .apply(new RequestOptions().error(R.drawable.doc))
                         .into(imageViewFoto);
@@ -174,7 +174,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
             @Override
             public void onFailure(Call<SelectSuratLainModel> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Koneksi gagal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateSuratKeputusanActivity.this, "Koneksi gagal", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -184,7 +184,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
      *
      */
 
-    private void updatePerjanjianKerjasama() {
+    private void saveSuratKeputusan() {
         Bundle dataExtra = getIntent().getExtras();
         final String id = dataExtra.getString("id");
 
@@ -206,20 +206,20 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
         if (noAgenda.isEmpty() || tujuan.isEmpty() || noSurat.isEmpty() || isi.isEmpty() || tglSurat.isEmpty() || ket.isEmpty()) {
 
             progressDialog.dismiss();
-            Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateSuratKeputusanActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
 
         } else {
 
             if (fileImage==null && filePdf==null && fileDocx==null) {
 
-                Call<MessageModel> call = APIService.Factory.create().updatePerjanjianKerjasama(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                Call<MessageModel> call = APIService.Factory.create().updateSuratKeputusan(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
                         requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  null);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratKeputusanActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -227,7 +227,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratKeputusanActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -239,14 +239,14 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileImage);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileImage.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().updatePerjanjianKerjasama(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                Call<MessageModel> call = APIService.Factory.create().updateSuratKeputusan(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
                         requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratKeputusanActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -254,7 +254,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratKeputusanActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -266,14 +266,14 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/pdf"), filePdf);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", filePdf.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().updatePerjanjianKerjasama(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                Call<MessageModel> call = APIService.Factory.create().updateSuratKeputusan(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
                         requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratKeputusanActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -281,7 +281,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratKeputusanActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -292,14 +292,14 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), fileDocx);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileDocx.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().updatePerjanjianKerjasama(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
+                Call<MessageModel> call = APIService.Factory.create().updateSuratKeputusan(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
                         requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratKeputusanActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -307,7 +307,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdatePerjanjianKerjasamaActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratKeputusanActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -359,11 +359,12 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
      *
      */
 
-    public boolean checkPermission(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(UpdatePerjanjianKerjasamaActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
+    public boolean checkPermission(String permission, int requestCode)
+    {
+        if (ContextCompat.checkSelfPermission(UpdateSuratKeputusanActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
 
             // Requesting the permission
-            ActivityCompat.requestPermissions(UpdatePerjanjianKerjasamaActivity.this,
+            ActivityCompat.requestPermissions(UpdateSuratKeputusanActivity.this,
                     new String[] { permission },
                     requestCode);
             return false;
@@ -393,7 +394,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
             Uri uri = data.getData();
 
             try {
-                filePdf = FileUtil.from(UpdatePerjanjianKerjasamaActivity.this, uri);
+                filePdf = FileUtil.from(UpdateSuratKeputusanActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+filePdf .getPath()+" file -" + filePdf + " : " + filePdf .exists());
 
             } catch (IOException e) {
@@ -409,7 +410,7 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
             Uri uri = data.getData();
 
             try {
-                fileDocx = FileUtil.from(UpdatePerjanjianKerjasamaActivity.this, uri);
+                fileDocx = FileUtil.from(UpdateSuratKeputusanActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+fileDocx .getPath()+" file -" + fileDocx + " : " + fileDocx .exists());
 
             } catch (IOException e) {
@@ -440,13 +441,13 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
         if (requestCode == PDF_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(UpdatePerjanjianKerjasamaActivity.this,
+                Toast.makeText(UpdateSuratKeputusanActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(UpdatePerjanjianKerjasamaActivity.this,
+                Toast.makeText(UpdateSuratKeputusanActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -456,13 +457,13 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
         if (requestCode == DOCX_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(UpdatePerjanjianKerjasamaActivity.this,
+                Toast.makeText(UpdateSuratKeputusanActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(UpdatePerjanjianKerjasamaActivity.this,
+                Toast.makeText(UpdateSuratKeputusanActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -535,8 +536,8 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
         }
 
         if (v == buttonSimpan) {
-            progressDialog = ProgressDialog.show(UpdatePerjanjianKerjasamaActivity.this, "", "Menyimpan.....", true, true);
-            updatePerjanjianKerjasama();
+            progressDialog = ProgressDialog.show(UpdateSuratKeputusanActivity.this, "", "Menyimpan.....", true, true);
+            saveSuratKeputusan();
         }
 
         if (v == buttonBatal) {
@@ -544,4 +545,5 @@ public class UpdatePerjanjianKerjasamaActivity extends AppCompatActivity impleme
         }
 
     }
+
 }

@@ -17,8 +17,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.erwintobing15.disposisi.R;
-import com.erwintobing15.disposisi.ui.LoginActivity;
-import com.erwintobing15.disposisi.ui.MainActivity;
+import com.erwintobing15.disposisi.ui.beranda.LoginActivity;
+import com.erwintobing15.disposisi.ui.beranda.MainActivity;
 import com.erwintobing15.disposisi.ui.referensi.ReferensiActivity;
 import com.erwintobing15.disposisi.ui.transaksi.TransaksiActivity;
 import com.erwintobing15.disposisi.util.SessionUtils;

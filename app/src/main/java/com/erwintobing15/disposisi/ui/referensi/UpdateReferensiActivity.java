@@ -13,17 +13,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
-import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.MessageModel;
 import com.erwintobing15.disposisi.model.SelectReferensiModel;
-import com.erwintobing15.disposisi.model.SelectSuratLainModel;
 import com.erwintobing15.disposisi.network.APIService;
-import com.erwintobing15.disposisi.ui.transaksi.UpdateSptjmActivity;
-import com.erwintobing15.disposisi.ui.transaksi.UpdateSuratKeteranganActivity;
-import com.erwintobing15.disposisi.util.SessionUtils;
 
 import java.util.Objects;
 

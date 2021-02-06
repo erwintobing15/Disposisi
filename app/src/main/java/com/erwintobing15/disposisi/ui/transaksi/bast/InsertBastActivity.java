@@ -1,4 +1,4 @@
-package com.erwintobing15.disposisi.ui.transaksi;
+package com.erwintobing15.disposisi.ui.transaksi.bast;
 
 import android.Manifest;
 import android.app.Activity;
@@ -46,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
+public class InsertBastActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
 
     private EditText editTextNoAgenda;
     private EditText editTextTujuan;
@@ -115,7 +115,7 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
 
     private void initToolbar() {
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Tambah Perjanjian Kerjasama");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Tambah BAST");
         toolbar.setTitleTextColor(Color.WHITE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -134,11 +134,11 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
     }
 
     /**
-     * Save surat pengantar masuk data on button clicked
+     * Save Agenda MOU data on button clicked
      *
      */
 
-    private void savePerjanjianKerjasama() {
+    private void saveBast() {
 
         String noAgenda = editTextNoAgenda.getText().toString();
         String tujuan = editTextTujuan.getText().toString();
@@ -147,7 +147,7 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
         String tglSurat = textViewTanggal.getText().toString();
         String ket = editTextKet.getText().toString();
 
-        final String idUser = SessionUtils.getLoggedUser(InsertPerjanjianKerjasamaActivity.this).getId();
+        final String idUser = SessionUtils.getLoggedUser(InsertBastActivity.this).getId();
 
         RequestBody requestBodyNoAgenda = RequestBody.create(MediaType.parse("text/plain"), noAgenda);
         RequestBody requestBodyTujuan = RequestBody.create(MediaType.parse("text/plain"), tujuan);
@@ -160,20 +160,20 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
         if (noAgenda.isEmpty() || tujuan.isEmpty() || noSurat.isEmpty() || isi.isEmpty() || tglSurat.isEmpty() || ket.isEmpty()) {
 
             progressDialog.dismiss();
-            Toast.makeText(InsertPerjanjianKerjasamaActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(InsertBastActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
 
         } else {
 
             if (fileImage==null && filePdf==null && fileDocx==null) {
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertPerjanjianKerjasama(requestBodyNoAgenda, requestBodyTujuan,
+                Call<MessageModel> call = APIService.Factory.create().postInsertBast(requestBodyNoAgenda, requestBodyTujuan,
                         requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, null);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertPerjanjianKerjasamaActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertBastActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -181,7 +181,7 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertPerjanjianKerjasamaActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertBastActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -193,14 +193,14 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileImage);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileImage.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertPerjanjianKerjasama(requestBodyNoAgenda, requestBodyTujuan,
+                Call<MessageModel> call = APIService.Factory.create().postInsertBast(requestBodyNoAgenda, requestBodyTujuan,
                         requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertPerjanjianKerjasamaActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertBastActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -208,7 +208,7 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertPerjanjianKerjasamaActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertBastActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -220,14 +220,14 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/pdf"), filePdf);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", filePdf.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertPerjanjianKerjasama(requestBodyNoAgenda, requestBodyTujuan,
+                Call<MessageModel> call = APIService.Factory.create().postInsertBast(requestBodyNoAgenda, requestBodyTujuan,
                         requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertPerjanjianKerjasamaActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertBastActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -235,7 +235,7 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertPerjanjianKerjasamaActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertBastActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -246,14 +246,14 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), fileDocx);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileDocx.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().postInsertPerjanjianKerjasama(requestBodyNoAgenda, requestBodyTujuan,
+                Call<MessageModel> call = APIService.Factory.create().postInsertBast(requestBodyNoAgenda, requestBodyTujuan,
                         requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertPerjanjianKerjasamaActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertBastActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -261,7 +261,7 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(InsertPerjanjianKerjasamaActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertBastActivity.this, "Berhasil menyimpan, refresh layar", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -315,10 +315,10 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
      */
 
     public boolean checkPermission(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(InsertPerjanjianKerjasamaActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(InsertBastActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
 
             // Requesting the permission
-            ActivityCompat.requestPermissions(InsertPerjanjianKerjasamaActivity.this,
+            ActivityCompat.requestPermissions(InsertBastActivity.this,
                     new String[] { permission },
                     requestCode);
             return false;
@@ -348,7 +348,7 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
             Uri uri = data.getData();
 
             try {
-                filePdf = FileUtil.from(InsertPerjanjianKerjasamaActivity.this, uri);
+                filePdf = FileUtil.from(InsertBastActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+filePdf .getPath()+" file -" + filePdf + " : " + filePdf .exists());
 
             } catch (IOException e) {
@@ -364,7 +364,7 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
             Uri uri = data.getData();
 
             try {
-                fileDocx = FileUtil.from(InsertPerjanjianKerjasamaActivity.this, uri);
+                fileDocx = FileUtil.from(InsertBastActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+fileDocx .getPath()+" file -" + fileDocx + " : " + fileDocx .exists());
 
             } catch (IOException e) {
@@ -395,13 +395,13 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
         if (requestCode == PDF_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(InsertPerjanjianKerjasamaActivity.this,
+                Toast.makeText(InsertBastActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(InsertPerjanjianKerjasamaActivity.this,
+                Toast.makeText(InsertBastActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -411,13 +411,13 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
         if (requestCode == DOCX_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(InsertPerjanjianKerjasamaActivity.this,
+                Toast.makeText(InsertBastActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(InsertPerjanjianKerjasamaActivity.this,
+                Toast.makeText(InsertBastActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -490,8 +490,8 @@ public class InsertPerjanjianKerjasamaActivity extends AppCompatActivity impleme
         }
 
         if (v == buttonSimpan) {
-            progressDialog = ProgressDialog.show(InsertPerjanjianKerjasamaActivity.this, "", "Menyimpan.....", true, true);
-            savePerjanjianKerjasama();
+            progressDialog = ProgressDialog.show(InsertBastActivity.this, "", "Menyimpan.....", true, true);
+            saveBast();
         }
 
         if (v == buttonBatal) {

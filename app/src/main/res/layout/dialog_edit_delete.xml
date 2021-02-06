@@ -36,7 +36,7 @@
             android:drawablePadding="16dp"
             android:fontFamily="sans-serif"
             android:padding="8dp"
-            android:text="EDIT"
+            android:text="UBAH"
             android:gravity="center_vertical"
             android:textSize="18sp" />
 
@@ -51,7 +51,7 @@
             android:fontFamily="sans-serif"
             android:padding="8dp"
             android:gravity="center_vertical"
-            android:text="DELETE"
+            android:text="HAPUS"
             android:textSize="18sp" />
 
     </LinearLayout>

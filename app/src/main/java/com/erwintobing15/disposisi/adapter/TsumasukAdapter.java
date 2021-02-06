@@ -43,7 +43,7 @@ public class TsumasukAdapter extends RecyclerView.Adapter<TsumasukAdapter.Tsumas
     public void onBindViewHolder(@NonNull TsumasukAdapter.TsumasukViewHolder tsmasukViewHolder, int i) {
         SUMasukModel model = list.get(i);
         Glide.with(context)
-                .load(Constants.IMAGES_URL+"su_masuk/"+model.getFile())
+                .load(Constants.IMAGES_URL+"surat_masuk_undangan/"+model.getFile())
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tsmasukViewHolder.circleImageView);
 

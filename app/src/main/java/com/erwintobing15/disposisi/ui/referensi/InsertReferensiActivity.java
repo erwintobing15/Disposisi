@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.model.MessageModel;
 import com.erwintobing15.disposisi.network.APIService;
-import com.erwintobing15.disposisi.ui.transaksi.InsertSuratKeputusanActivity;
 import com.erwintobing15.disposisi.util.SessionUtils;
 
 import java.util.Objects;

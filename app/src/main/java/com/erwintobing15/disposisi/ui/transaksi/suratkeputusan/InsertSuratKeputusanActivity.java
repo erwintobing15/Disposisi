@@ -1,4 +1,4 @@
-package com.erwintobing15.disposisi.ui.transaksi;
+package com.erwintobing15.disposisi.ui.transaksi.suratkeputusan;
 
 import android.Manifest;
 import android.app.Activity;
@@ -27,15 +27,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
-import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.MessageModel;
-import com.erwintobing15.disposisi.model.SelectSuratLainModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.util.FileUtil;
 import com.erwintobing15.disposisi.util.Imageutils;
+import com.erwintobing15.disposisi.util.SessionUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdateSuratPerintahActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
+public class InsertSuratKeputusanActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
 
     private EditText editTextNoAgenda;
     private EditText editTextTujuan;
@@ -85,22 +82,16 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_surat_lain);
-        progressDialog = ProgressDialog.show(UpdateSuratPerintahActivity.this, "", "Load Data.....", true, false);
+        setContentView(R.layout.activity_insert_surat_lain);
 
         initViews();
         initUtils();
         initToolbar();
-
-        Bundle dataExtra = getIntent().getExtras();
-        final String id = dataExtra.getString("id");    // get id from intent extra
-
-        loadViews(id);
         initListeners();
     }
 
     /**
-     * Initialize views, toolbar, listener, utils
+     * Initialize views, toolbar, listener
      *
      */
 
@@ -112,7 +103,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
         editTextKet = findViewById(R.id.et_insert_keterangan);
         textViewTanggal = findViewById(R.id.tv_insert_tanggal_surat);
         imageViewPilihTanggal = findViewById(R.id.iv_insert_calender);
-        toolbar = findViewById(R.id.update_surat_lain_toolbar);
+        toolbar = findViewById(R.id.insert_surat_lain_toolbar);
         buttonPilihGambar = findViewById(R.id.btn_insert_image);
         buttonPilihPdf = findViewById(R.id.btn_insert_pdf);
         buttonPilihDocx = findViewById(R.id.btn_insert_docx);
@@ -124,7 +115,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
 
     private void initToolbar() {
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Ubah Surat Perintah");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Tambah Surat Keputusan");
         toolbar.setTitleTextColor(Color.WHITE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -143,50 +134,11 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
     }
 
     /**
-     * Load view of given id from intent extra
-     *
-     * @param id
-     */
-
-    private void loadViews(String id) {
-
-        Call<SelectSuratLainModel> call = APIService.Factory.create().oneSuratPerintah(id);
-        call.enqueue(new Callback<SelectSuratLainModel>() {
-            @Override
-            public void onResponse(Call<SelectSuratLainModel> call, Response<SelectSuratLainModel> response) {
-                progressDialog.dismiss();
-                editTextNoAgenda.setText(response.body().getNo_agenda());
-                editTextTujuan.setText(response.body().getTujuan());
-                editTextNoSurat.setText(response.body().getNo_surat());
-                editTextIsi.setText(response.body().getIsi());
-                editTextKet.setText(response.body().getKeterangan());
-                textViewTanggal.setText(response.body().getTgl_surat());
-                textViewPfd.setText(response.body().getFile());
-
-                // load images
-                imageViewFoto.setVisibility(View.VISIBLE);
-                Glide.with(UpdateSuratPerintahActivity.this)
-                        .load(Constants.IMAGES_URL+"surat_lain/"+response.body().getFile())
-                        .apply(new RequestOptions().error(R.drawable.doc))
-                        .into(imageViewFoto);
-            }
-
-            @Override
-            public void onFailure(Call<SelectSuratLainModel> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(UpdateSuratPerintahActivity.this, "Koneksi gagal", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * Save surat masuk data on button clicked
+     * Save surat pengantar masuk data on button clicked
      *
      */
 
-    private void saveSuratPerintah() {
-        Bundle dataExtra = getIntent().getExtras();
-        final String id = dataExtra.getString("id");
+    private void saveSuratKeputusan() {
 
         String noAgenda = editTextNoAgenda.getText().toString();
         String tujuan = editTextTujuan.getText().toString();
@@ -195,31 +147,33 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
         String tglSurat = textViewTanggal.getText().toString();
         String ket = editTextKet.getText().toString();
 
-        RequestBody requestBodyId = RequestBody.create(MediaType.parse("text/plain"), id);
+        final String idUser = SessionUtils.getLoggedUser(InsertSuratKeputusanActivity.this).getId();
+
         RequestBody requestBodyNoAgenda = RequestBody.create(MediaType.parse("text/plain"), noAgenda);
         RequestBody requestBodyTujuan = RequestBody.create(MediaType.parse("text/plain"), tujuan);
         RequestBody requestBodyNoSurat = RequestBody.create(MediaType.parse("text/plain"), noSurat);
         RequestBody requestBodyIsi = RequestBody.create(MediaType.parse("text/plain"), isi);
         RequestBody requestBodyTanggalSurat = RequestBody.create(MediaType.parse("text/plain"), tglSurat);
         RequestBody requestBodyKeterangan = RequestBody.create(MediaType.parse("text/plain"), ket);
+        RequestBody requestBodyIdUser = RequestBody.create(MediaType.parse("text/plain"), idUser);
 
         if (noAgenda.isEmpty() || tujuan.isEmpty() || noSurat.isEmpty() || isi.isEmpty() || tglSurat.isEmpty() || ket.isEmpty()) {
 
             progressDialog.dismiss();
-            Toast.makeText(UpdateSuratPerintahActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(InsertSuratKeputusanActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
 
         } else {
 
             if (fileImage==null && filePdf==null && fileDocx==null) {
 
-                Call<MessageModel> call = APIService.Factory.create().updateSuratPerintah(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  null);
+                Call<MessageModel> call = APIService.Factory.create().postInsertSuratKeputusan(requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, null);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSuratPerintahActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertSuratKeputusanActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -227,7 +181,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSuratPerintahActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertSuratKeputusanActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -239,14 +193,14 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileImage);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileImage.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().updateSuratPerintah(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
+                Call<MessageModel> call = APIService.Factory.create().postInsertSuratKeputusan(requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSuratPerintahActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertSuratKeputusanActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -254,7 +208,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSuratPerintahActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertSuratKeputusanActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -266,14 +220,14 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/pdf"), filePdf);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", filePdf.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().updateSuratPerintah(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
+                Call<MessageModel> call = APIService.Factory.create().postInsertSuratKeputusan(requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSuratPerintahActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertSuratKeputusanActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -281,7 +235,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSuratPerintahActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertSuratKeputusanActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -292,14 +246,14 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), fileDocx);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileDocx.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().updateSuratPerintah(requestBodyId, requestBodyNoAgenda, requestBodyTujuan,
-                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
+                Call<MessageModel> call = APIService.Factory.create().postInsertSuratKeputusan(requestBodyNoAgenda, requestBodyTujuan,
+                        requestBodyNoSurat, requestBodyIsi, requestBodyTanggalSurat, requestBodyKeterangan, requestBodyIdUser, multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSuratPerintahActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertSuratKeputusanActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -307,7 +261,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSuratPerintahActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InsertSuratKeputusanActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -318,7 +272,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
     }
 
     /**
-     * Pdf, docx and image file picker
+     * Images, pdf, and docs picker
      *
      */
 
@@ -339,7 +293,8 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
     }
 
     /**
-     * Toolbar back button
+     * Back from insert surat pengantar keluar view
+     *
      * @param item
      * @return
      */
@@ -361,10 +316,10 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
 
     public boolean checkPermission(String permission, int requestCode)
     {
-        if (ContextCompat.checkSelfPermission(UpdateSuratPerintahActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(InsertSuratKeputusanActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
 
             // Requesting the permission
-            ActivityCompat.requestPermissions(UpdateSuratPerintahActivity.this,
+            ActivityCompat.requestPermissions(InsertSuratKeputusanActivity.this,
                     new String[] { permission },
                     requestCode);
             return false;
@@ -394,7 +349,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
             Uri uri = data.getData();
 
             try {
-                filePdf = FileUtil.from(UpdateSuratPerintahActivity.this, uri);
+                filePdf = FileUtil.from(InsertSuratKeputusanActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+filePdf .getPath()+" file -" + filePdf + " : " + filePdf .exists());
 
             } catch (IOException e) {
@@ -410,7 +365,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
             Uri uri = data.getData();
 
             try {
-                fileDocx = FileUtil.from(UpdateSuratPerintahActivity.this, uri);
+                fileDocx = FileUtil.from(InsertSuratKeputusanActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+fileDocx .getPath()+" file -" + fileDocx + " : " + fileDocx .exists());
 
             } catch (IOException e) {
@@ -441,13 +396,13 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
         if (requestCode == PDF_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(UpdateSuratPerintahActivity.this,
+                Toast.makeText(InsertSuratKeputusanActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(UpdateSuratPerintahActivity.this,
+                Toast.makeText(InsertSuratKeputusanActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -457,13 +412,13 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
         if (requestCode == DOCX_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(UpdateSuratPerintahActivity.this,
+                Toast.makeText(InsertSuratKeputusanActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(UpdateSuratPerintahActivity.this,
+                Toast.makeText(InsertSuratKeputusanActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -490,7 +445,7 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
     }
 
     /**
-     * All this class onclick listener handler
+     * All onclick handler
      *
      * @param v
      */
@@ -536,8 +491,8 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
         }
 
         if (v == buttonSimpan) {
-            progressDialog = ProgressDialog.show(UpdateSuratPerintahActivity.this, "", "Menyimpan.....", true, true);
-            saveSuratPerintah();
+            progressDialog = ProgressDialog.show(InsertSuratKeputusanActivity.this, "", "Menyimpan.....", true, true);
+            saveSuratKeputusan();
         }
 
         if (v == buttonBatal) {
@@ -545,5 +500,4 @@ public class UpdateSuratPerintahActivity extends AppCompatActivity implements Im
         }
 
     }
-
 }

@@ -28,16 +28,12 @@ import android.widget.Toast;
 
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.adapter.ReferensiAdapter;
-import com.erwintobing15.disposisi.adapter.TsuratmasukAdapter;
 import com.erwintobing15.disposisi.model.MessageModel;
 import com.erwintobing15.disposisi.model.ReferensiModel;
-import com.erwintobing15.disposisi.model.SuratMasukModel;
 import com.erwintobing15.disposisi.network.APIService;
-import com.erwintobing15.disposisi.ui.galeri.GaleriActivity;
-import com.erwintobing15.disposisi.ui.LoginActivity;
-import com.erwintobing15.disposisi.ui.MainActivity;
+import com.erwintobing15.disposisi.ui.beranda.LoginActivity;
+import com.erwintobing15.disposisi.ui.beranda.MainActivity;
 import com.erwintobing15.disposisi.ui.transaksi.TransaksiActivity;
-import com.erwintobing15.disposisi.ui.transaksi.UpdateSuratMasukActivity;
 import com.erwintobing15.disposisi.util.SessionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -95,7 +91,7 @@ public class ReferensiActivity extends AppCompatActivity implements ReferensiAda
         setSupportActionBar(toolbar);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, titleName, titleName);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorAccent));
+        actionBarDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
         actionBarDrawerToggle.syncState();
     }
 

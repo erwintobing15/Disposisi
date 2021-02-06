@@ -48,7 +48,7 @@ public class TspkeluarAdapter extends RecyclerView.Adapter<TspkeluarAdapter.Tspk
     public void onBindViewHolder(@NonNull TspkeluarAdapter.TspkeluarViewHolder tspkeluarViewHolder, int i) {
         SPKeluarModel model = list.get(i);
         Glide.with(context)
-                .load(Constants.IMAGES_URL+"sp_keluar/"+model.getFile())
+                .load(Constants.IMAGES_URL+"surat_pengantar_keluar/"+model.getFile())
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tspkeluarViewHolder.circleImageView);
 
