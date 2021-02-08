@@ -3,11 +3,11 @@ package com.erwintobing15.disposisi.network;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.MessageModel;
 import com.erwintobing15.disposisi.model.ReferensiModel;
-import com.erwintobing15.disposisi.model.SPKeluarModel;
-import com.erwintobing15.disposisi.model.SUMasukModel;
+import com.erwintobing15.disposisi.model.SuratPengantarKeluarModel;
+import com.erwintobing15.disposisi.model.SuratMasukUndanganModel;
 import com.erwintobing15.disposisi.model.SelectReferensiModel;
-import com.erwintobing15.disposisi.model.SelectSPKeluarModel;
-import com.erwintobing15.disposisi.model.SelectSUMasukModel;
+import com.erwintobing15.disposisi.model.SelectSuratPengantarKeluarModel;
+import com.erwintobing15.disposisi.model.SelectSuratMasukUndanganModel;
 import com.erwintobing15.disposisi.model.SelectSuratKeluarModel;
 import com.erwintobing15.disposisi.model.SelectSuratLainModel;
 import com.erwintobing15.disposisi.model.SelectSuratMasukModel;
@@ -141,12 +141,12 @@ public interface APIService {
      */
 
     @FormUrlEncoded
-    @POST("api/transaksi/suratpengantarkeluar/allSPKeluar.php")
-    Call<SPKeluarModel.SPKeluarDataModel> allSPKeluar(@Field("id") String id);
+    @POST("api/transaksi/suratpengantarkeluar/allSuratPengantarKeluar.php")
+    Call<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel> allSuratPengantarKeluar(@Field("id") String id);
 
     @Multipart
-    @POST("api/transaksi/suratpengantarkeluar/insertSPKeluar.php")
-    Call<MessageModel> postInsertSPKeluar(@Part("no_agenda") RequestBody noAgenda,
+    @POST("api/transaksi/suratpengantarkeluar/insertSuratPengantarKeluar.php")
+    Call<MessageModel> postInsertSuratPengantarKeluar(@Part("no_agenda") RequestBody noAgenda,
                                              @Part("no_surat") RequestBody noSurat,
                                              @Part("tujuan") RequestBody tujuan,
                                              @Part("isi") RequestBody isi,
@@ -156,16 +156,16 @@ public interface APIService {
                                              @Part MultipartBody.Part file);
 
     @FormUrlEncoded
-    @POST("api/transaksi/suratpengantarkeluar/deleteSPKeluar.php")
-    Call<MessageModel> postDeleteSPKeluar(@Field("id") String id);
+    @POST("api/transaksi/suratpengantarkeluar/deleteSuratPengantarKeluar.php")
+    Call<MessageModel> postDeleteSuratPengantarKeluar(@Field("id") String id);
 
     @FormUrlEncoded
-    @POST("api/transaksi/suratpengantarkeluar/oneSPKeluar.php")
-    Call<SelectSPKeluarModel> oneSPKeluar(@Field("id") String id);
+    @POST("api/transaksi/suratpengantarkeluar/oneSuratPengantarKeluar.php")
+    Call<SelectSuratPengantarKeluarModel> oneSuratPengantarKeluar(@Field("id") String id);
 
     @Multipart
-    @POST("api/transaksi/suratpengantarkeluar/updateSPKeluar.php")
-    Call<MessageModel> postUpdateSPKeluar(@Part("id") RequestBody id,
+    @POST("api/transaksi/suratpengantarkeluar/updateSuratPengantarKeluar.php")
+    Call<MessageModel> postUpdateSuratPengantarKeluar(@Part("id") RequestBody id,
                                              @Part("no_agenda") RequestBody noAgenda,
                                              @Part("no_surat") RequestBody noSurat,
                                              @Part("tujuan") RequestBody tujuan,
@@ -175,17 +175,17 @@ public interface APIService {
                                              @Part MultipartBody.Part file);
 
     /**
-     * Fetch surat undangan masuk API endpoint
+     * Fetch surat masuk undangan API endpoint
      *
      */
 
     @FormUrlEncoded
-    @POST("api/transaksi/suratundanganmasuk/allSUMasuk.php")
-    Call<SUMasukModel.SUMasukDataModel> allSUMasuk(@Field("id") String id);
+    @POST("api/transaksi/suratmasukundangan/allSuratMasukUndangan.php")
+    Call<SuratMasukUndanganModel.SuratMasukUndanganDataModel> allSuratMasukUndangan(@Field("id") String id);
 
     @Multipart
-    @POST("api/transaksi/suratundanganmasuk/insertSUMasuk.php")
-    Call<MessageModel> postInsertSUMasuk(@Part("no_agenda") RequestBody noAgenda,
+    @POST("api/transaksi/suratmasukundangan/insertSuratMasukUndangan.php")
+    Call<MessageModel> postInsertSuratMasukUndangan(@Part("no_agenda") RequestBody noAgenda,
                                           @Part("no_surat") RequestBody noSurat,
                                           @Part("asal_surat") RequestBody asalSurat,
                                           @Part("isi") RequestBody isi,
@@ -196,16 +196,16 @@ public interface APIService {
                                           @Part MultipartBody.Part file);
 
     @FormUrlEncoded
-    @POST("api/transaksi/suratundanganmasuk/deleteSUMasuk.php")
-    Call<MessageModel> postdeleteSUMasuk(@Field("id") String id);
+    @POST("api/transaksi/suratmasukundangan/deleteSuratMasukUndangan.php")
+    Call<MessageModel> postdeleteSuratMasukUndangan(@Field("id") String id);
 
     @FormUrlEncoded
-    @POST("api/transaksi/suratundanganmasuk/oneSUMasuk.php")
-    Call<SelectSUMasukModel> oneSUMasuk(@Field("id") String id);
+    @POST("api/transaksi/suratmasukundangan/oneSuratMasukUndangan.php")
+    Call<SelectSuratMasukUndanganModel> oneSuratMasukUndangan(@Field("id") String id);
 
     @Multipart
-    @POST("api/transaksi/suratundanganmasuk/updateSUMasuk.php")
-    Call<MessageModel> updateSUMasuk(@Part("id") RequestBody id,
+    @POST("api/transaksi/suratmasukundangan/updateSuratMasukUndangan.php")
+    Call<MessageModel> updateSuratMasukUndangan(@Part("id") RequestBody id,
                                      @Part("no_agenda") RequestBody noAgenda,
                                      @Part("no_surat") RequestBody noSurat,
                                      @Part("asal_surat") RequestBody asalSurat,

@@ -14,19 +14,24 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
-import com.erwintobing15.disposisi.model.SUMasukModel;
+import com.erwintobing15.disposisi.model.SuratPengantarKeluarModel;
 
 import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TsumasukAdapter extends RecyclerView.Adapter<TsumasukAdapter.TsumasukViewHolder>{
+/**
+ * Adapter view class for transaksi surat pengantar keluar (Tspkeluar)
+ * date         : 08 Jan 2021 00:10 am
+ * modified     : 08 Feb 2021 07:25 am
+ */
+
+public class TsuratpengantarkeluarAdapter extends RecyclerView.Adapter<TsuratpengantarkeluarAdapter.TspkeluarViewHolder> {
 
     private Context context;
-    private List<SUMasukModel> list;
-    private TsumasukAdapter.Listener listener;
+    private List<SuratPengantarKeluarModel> list;
+    private TsuratpengantarkeluarAdapter.Listener listener;
 
-    public TsumasukAdapter(Context context, List<SUMasukModel> list, TsumasukAdapter.Listener listener) {
+    public TsuratpengantarkeluarAdapter(Context context, List<SuratPengantarKeluarModel> list, TsuratpengantarkeluarAdapter.Listener listener) {
         this.context = context;
         this.list = list;
         this.listener = listener;
@@ -34,28 +39,28 @@ public class TsumasukAdapter extends RecyclerView.Adapter<TsumasukAdapter.Tsumas
 
     @NonNull
     @Override
-    public TsumasukAdapter.TsumasukViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public TsuratpengantarkeluarAdapter.TspkeluarViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.item_transaksi_surat, null);
-        return new TsumasukAdapter.TsumasukViewHolder(view);
+        return new TsuratpengantarkeluarAdapter.TspkeluarViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TsumasukAdapter.TsumasukViewHolder tsmasukViewHolder, int i) {
-        SUMasukModel model = list.get(i);
+    public void onBindViewHolder(@NonNull TsuratpengantarkeluarAdapter.TspkeluarViewHolder tspkeluarViewHolder, int i) {
+        SuratPengantarKeluarModel model = list.get(i);
         Glide.with(context)
-                .load(Constants.IMAGES_URL+"surat_masuk_undangan/"+model.getFile())
+                .load(Constants.IMAGES_URL+"surat_pengantar_keluar/"+model.getFile())
                 .apply(new RequestOptions().error(R.drawable.doc))
-                .into(tsmasukViewHolder.circleImageView);
+                .into(tspkeluarViewHolder.circleImageView);
 
-        tsmasukViewHolder.tglCatat.setText(model.getTgl_catat());
-        tsmasukViewHolder.isiSurat.setText(model.getIsi());
-        tsmasukViewHolder.asalSurat.setText(model.getAsal_surat());
+        tspkeluarViewHolder.tglCatat.setText(model.getTgl_catat());
+        tspkeluarViewHolder.isiSurat.setText(model.getIsi());
+        tspkeluarViewHolder.tujuanSurat.setText(model.getTujuan());
 
 
         if (model.getFile().isEmpty()) {
-            tsmasukViewHolder.namaFile.setText("Tidak ada file");
+            tspkeluarViewHolder.namaFile.setText("Tidak ada file");
         } else {
-            tsmasukViewHolder.namaFile.setText(model.getFile());
+            tspkeluarViewHolder.namaFile.setText(model.getFile());
         }
     }
 
@@ -64,26 +69,26 @@ public class TsumasukAdapter extends RecyclerView.Adapter<TsumasukAdapter.Tsumas
         return list.size();
     }
 
-    class TsumasukViewHolder extends RecyclerView.ViewHolder {
+    class TspkeluarViewHolder extends RecyclerView.ViewHolder {
 
         private CircleImageView circleImageView;
         private TextView tglCatat;
         private TextView namaFile;
         private TextView isiSurat;
-        private TextView asalSurat;
+        private TextView tujuanSurat;
 
-        public TsumasukViewHolder(@NonNull View itemView) {
+        public TspkeluarViewHolder(@NonNull View itemView) {
             super(itemView);
             circleImageView = itemView.findViewById(R.id.civ_trans_surat);
             tglCatat = itemView.findViewById(R.id.tv_tgl_catat);
             namaFile = itemView.findViewById(R.id.tv_nama_file);
             isiSurat = itemView.findViewById(R.id.tv_isi);
-            asalSurat = itemView.findViewById(R.id.tv_tujuan_or_asal);
+            tujuanSurat = itemView.findViewById(R.id.tv_tujuan_or_asal);
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    listener.onTsumasukLongClick(list.get(getAdapterPosition()).getId());
+                    listener.onTsuratpengantarkeluarLongClick(list.get(getAdapterPosition()).getId());
                     return true;
                 }
             });
@@ -91,21 +96,21 @@ public class TsumasukAdapter extends RecyclerView.Adapter<TsumasukAdapter.Tsumas
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onTsumasukClick(list.get(getAdapterPosition()).getId());
+                    listener.onTsuratpengantarkeluarClick(list.get(getAdapterPosition()).getId());
                 }
             });
         }
 
     }
 
-    public void replaceData(List<SUMasukModel> modelList){
+    public void replaceData(List<SuratPengantarKeluarModel> modelList){
         list = modelList;
         notifyDataSetChanged();
     }
 
     public interface Listener{
-        void onTsumasukClick(String id);
+        void onTsuratpengantarkeluarClick(String id);
 
-        void onTsumasukLongClick(String id);
+        void onTsuratpengantarkeluarLongClick(String id);
     }
 }

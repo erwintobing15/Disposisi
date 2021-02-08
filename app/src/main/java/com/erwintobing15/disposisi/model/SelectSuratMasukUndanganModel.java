@@ -1,6 +1,6 @@
 package com.erwintobing15.disposisi.model;
 
-public class SelectSUMasukModel {
+public class SelectSuratMasukUndanganModel {
 
     private String id;
     private String no_agenda;

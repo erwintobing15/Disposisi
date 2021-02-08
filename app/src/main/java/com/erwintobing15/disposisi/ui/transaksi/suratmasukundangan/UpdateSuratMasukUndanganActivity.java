@@ -1,4 +1,4 @@
-package com.erwintobing15.disposisi.ui.transaksi;
+package com.erwintobing15.disposisi.ui.transaksi.suratmasukundangan;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,8 +32,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.MessageModel;
-import com.erwintobing15.disposisi.model.SelectSPKeluarModel;
-import com.erwintobing15.disposisi.model.SelectSUMasukModel;
+import com.erwintobing15.disposisi.model.SelectSuratMasukUndanganModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.util.FileUtil;
 import com.erwintobing15.disposisi.util.Imageutils;
@@ -50,7 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdateSumasukActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
+public class UpdateSuratMasukUndanganActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener, View.OnClickListener {
 
     private EditText editTextNoAgenda;
     private EditText editTextAsal;
@@ -88,7 +87,7 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_sumasuk);
-        progressDialog = ProgressDialog.show(UpdateSumasukActivity.this, "", "Load Data.....", true, false);
+        progressDialog = ProgressDialog.show(UpdateSuratMasukUndanganActivity.this, "", "Load Data.....", true, false);
 
         initViews();
         initUtils();
@@ -153,10 +152,10 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
 
     private void loadViews(String id) {
 
-        Call<SelectSUMasukModel> call = APIService.Factory.create().oneSUMasuk(id);
-        call.enqueue(new Callback<SelectSUMasukModel>() {
+        Call<SelectSuratMasukUndanganModel> call = APIService.Factory.create().oneSuratMasukUndangan(id);
+        call.enqueue(new Callback<SelectSuratMasukUndanganModel>() {
             @Override
-            public void onResponse(Call<SelectSUMasukModel> call, Response<SelectSUMasukModel> response) {
+            public void onResponse(Call<SelectSuratMasukUndanganModel> call, Response<SelectSuratMasukUndanganModel> response) {
                 progressDialog.dismiss();
                 editTextNoAgenda.setText(response.body().getNo_agenda());
                 editTextAsal.setText(response.body().getAsal_surat());
@@ -169,16 +168,16 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
 
                 // load images
                 imageViewFoto.setVisibility(View.VISIBLE);
-                Glide.with(UpdateSumasukActivity.this)
-                        .load(Constants.IMAGES_URL+"su_masuk/"+response.body().getFile())
+                Glide.with(UpdateSuratMasukUndanganActivity.this)
+                        .load(Constants.IMAGES_URL+"surat_masuk_undangan/"+response.body().getFile())
                         .apply(new RequestOptions().error(R.drawable.doc))
                         .into(imageViewFoto);
             }
 
             @Override
-            public void onFailure(Call<SelectSUMasukModel> call, Throwable t) {
+            public void onFailure(Call<SelectSuratMasukUndanganModel> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(UpdateSumasukActivity.this, "Koneksi gagal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Koneksi gagal", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -212,20 +211,20 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
         if (noAgenda.isEmpty() || asal.isEmpty() || noSurat.isEmpty() || isi.isEmpty() || tglSurat.isEmpty() || ket.isEmpty()) {
 
             progressDialog.dismiss();
-            Toast.makeText(UpdateSumasukActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Silahkan lengkapi data", Toast.LENGTH_SHORT).show();
 
         } else {
 
             if (fileImage==null && filePdf==null && fileDocx==null) {
 
-                Call<MessageModel> call = APIService.Factory.create().updateSUMasuk(requestBodyId, requestBodyNoAgenda, requestBodyAsal,
+                Call<MessageModel> call = APIService.Factory.create().updateSuratMasukUndangan(requestBodyId, requestBodyNoAgenda, requestBodyAsal,
                         requestBodyNoSurat, requestBodyIsi, requestBodyKode, requestBodyTanggalSurat, requestBodyKeterangan,  null);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSumasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -233,7 +232,7 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSumasukActivity.this, "Berhasil Menyimpan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -245,14 +244,14 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileImage);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileImage.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().updateSUMasuk(requestBodyId, requestBodyNoAgenda, requestBodyAsal,
+                Call<MessageModel> call = APIService.Factory.create().updateSuratMasukUndangan(requestBodyId, requestBodyNoAgenda, requestBodyAsal,
                         requestBodyNoSurat, requestBodyIsi, requestBodyKode, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSumasukActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -260,7 +259,7 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSumasukActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -272,14 +271,14 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/pdf"), filePdf);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", filePdf.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().updateSUMasuk(requestBodyId, requestBodyNoAgenda, requestBodyAsal,
+                Call<MessageModel> call = APIService.Factory.create().updateSuratMasukUndangan(requestBodyId, requestBodyNoAgenda, requestBodyAsal,
                         requestBodyNoSurat, requestBodyIsi, requestBodyKode, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSumasukActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -287,7 +286,7 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSumasukActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -298,14 +297,14 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), fileDocx);
                 MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", fileDocx.getName(), requestBody);
 
-                Call<MessageModel> call = APIService.Factory.create().updateSUMasuk(requestBodyId, requestBodyNoAgenda, requestBodyAsal,
+                Call<MessageModel> call = APIService.Factory.create().updateSuratMasukUndangan(requestBodyId, requestBodyNoAgenda, requestBodyAsal,
                         requestBodyNoSurat, requestBodyIsi, requestBodyKode, requestBodyTanggalSurat, requestBodyKeterangan,  multipartBody);
 
                 call.enqueue(new Callback<MessageModel>() {
                     @Override
                     public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSumasukActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -313,7 +312,7 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
                     @Override
                     public void onFailure(Call<MessageModel> call, Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(UpdateSumasukActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UpdateSuratMasukUndanganActivity.this, "Berhasil mengubah", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
@@ -367,10 +366,10 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
 
     public boolean checkPermission(String permission, int requestCode)
     {
-        if (ContextCompat.checkSelfPermission(UpdateSumasukActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(UpdateSuratMasukUndanganActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
 
             // Requesting the permission
-            ActivityCompat.requestPermissions(UpdateSumasukActivity.this,
+            ActivityCompat.requestPermissions(UpdateSuratMasukUndanganActivity.this,
                     new String[] { permission },
                     requestCode);
             return false;
@@ -400,7 +399,7 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
             Uri uri = data.getData();
 
             try {
-                filePdf = FileUtil.from(UpdateSumasukActivity.this, uri);
+                filePdf = FileUtil.from(UpdateSuratMasukUndanganActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+filePdf .getPath()+" file -" + filePdf + " : " + filePdf .exists());
 
             } catch (IOException e) {
@@ -416,7 +415,7 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
             Uri uri = data.getData();
 
             try {
-                fileDocx = FileUtil.from(UpdateSumasukActivity.this, uri);
+                fileDocx = FileUtil.from(UpdateSuratMasukUndanganActivity.this, uri);
                 Log.d("file", "File...:::: uti - "+fileDocx .getPath()+" file -" + fileDocx + " : " + fileDocx .exists());
 
             } catch (IOException e) {
@@ -447,13 +446,13 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
         if (requestCode == PDF_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(UpdateSumasukActivity.this,
+                Toast.makeText(UpdateSuratMasukUndanganActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(UpdateSumasukActivity.this,
+                Toast.makeText(UpdateSuratMasukUndanganActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -463,13 +462,13 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
         if (requestCode == DOCX_STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(UpdateSumasukActivity.this,
+                Toast.makeText(UpdateSuratMasukUndanganActivity.this,
                         "Akses diberikan, silahkan pilih lagi",
                         Toast.LENGTH_SHORT)
                         .show();
             }
             else {
-                Toast.makeText(UpdateSumasukActivity.this,
+                Toast.makeText(UpdateSuratMasukUndanganActivity.this,
                         "Akses penyimpanan ditolak",
                         Toast.LENGTH_SHORT)
                         .show();
@@ -542,7 +541,7 @@ public class UpdateSumasukActivity extends AppCompatActivity implements Imageuti
         }
 
         if (v == buttonSimpan) {
-            progressDialog = ProgressDialog.show(UpdateSumasukActivity.this, "", "Menyimpan.....", true, true);
+            progressDialog = ProgressDialog.show(UpdateSuratMasukUndanganActivity.this, "", "Menyimpan.....", true, true);
             saveSuratPengantarKeluar();
         }
 

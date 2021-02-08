@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.transaksi.UpdateSpkeluarActivity">
+    tools:context=".ui.transaksi.suratpengantarkeluar.UpdateSuratPengantarkeluarActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/update_surat_pengantar_keluar_toolbar"

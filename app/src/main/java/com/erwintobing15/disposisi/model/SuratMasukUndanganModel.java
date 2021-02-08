@@ -2,7 +2,7 @@ package com.erwintobing15.disposisi.model;
 
 import java.util.List;
 
-public class SUMasukModel {
+public class SuratMasukUndanganModel {
 
     private String id;
     private String no_agenda;
@@ -104,14 +104,14 @@ public class SUMasukModel {
         this.id_user = id_user;
     }
 
-    public class SUMasukDataModel extends MessageModel {
-        private List<SUMasukModel> results;
+    public class SuratMasukUndanganDataModel extends MessageModel {
+        private List<SuratMasukUndanganModel> results;
 
-        public List<SUMasukModel> getResults() {
+        public List<SuratMasukUndanganModel> getResults() {
             return results;
         }
 
-        public void setResults(List<SUMasukModel> results) {
+        public void setResults(List<SuratMasukUndanganModel> results) {
             this.results = results;
         }
     }

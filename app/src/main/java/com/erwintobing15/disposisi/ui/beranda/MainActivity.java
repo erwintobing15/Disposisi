@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.model.ReferensiModel;
-import com.erwintobing15.disposisi.model.SPKeluarModel;
-import com.erwintobing15.disposisi.model.SUMasukModel;
+import com.erwintobing15.disposisi.model.SuratPengantarKeluarModel;
+import com.erwintobing15.disposisi.model.SuratMasukUndanganModel;
 import com.erwintobing15.disposisi.model.SuratKeluarModel;
 import com.erwintobing15.disposisi.model.SuratLainModel;
 import com.erwintobing15.disposisi.model.SuratMasukModel;
@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView suratMasukCount;
     private TextView suratKeluarCount;
-    private TextView spKeluarCount;
-    private TextView suMasukCount;
+    private TextView suratPengantarKeluarCount;
+    private TextView suratMasukUndanganCount;
     private TextView suratPerintahCount;
     private TextView suratKeputusanCount;
     private TextView nodinCount;
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private CardView cardViewSuratMasuk;
     private CardView cardViewSuratKeluar;
-    private CardView cardViewSPKeluar;
-    private CardView cardViewSUMasuk;
+    private CardView cardViewSuratPengantarKeluar;
+    private CardView cardViewSuratMasukUndangan;
     private CardView cardViewSuratPerintah;
     private CardView cardViewSuratKeputsan;
     private CardView cardViewNodin;
@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationView = findViewById(R.id.navigation_menu_beranda);
         suratMasukCount = findViewById(R.id.tv_surat_masuk);
         suratKeluarCount = findViewById(R.id.tv_surat_keluar);
-        spKeluarCount = findViewById(R.id.tv_surat_pengantar_keluar);
-        suMasukCount = findViewById(R.id.tv_surat_udangan_masuk);
+        suratPengantarKeluarCount = findViewById(R.id.tv_surat_pengantar_keluar);
+        suratMasukUndanganCount = findViewById(R.id.tv_surat_udangan_masuk);
         suratPerintahCount = findViewById(R.id.tv_surat_perintah);
         suratKeputusanCount = findViewById(R.id.tv_surat_keputusan);
         nodinCount = findViewById(R.id.tv_nodin);
@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         cardViewSuratMasuk = findViewById(R.id.cv_surat_masuk);
         cardViewSuratKeluar = findViewById(R.id.cv_surat_keluar);
-        cardViewSPKeluar = findViewById(R.id.cv_surat_pengantar_keluar);
-        cardViewSUMasuk = findViewById(R.id.cv_surat_undanga_masuk);
+        cardViewSuratPengantarKeluar = findViewById(R.id.cv_surat_pengantar_keluar);
+        cardViewSuratMasukUndangan = findViewById(R.id.cv_surat_undanga_masuk);
         cardViewSuratPerintah = findViewById(R.id.cv_surat_perintah);
         cardViewSuratKeputsan = findViewById(R.id.cv_surat_keputusan);
         cardViewNodin = findViewById(R.id.cv_nodin);
@@ -126,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initListeners() {
         cardViewSuratMasuk.setOnClickListener(this);
         cardViewSuratKeluar.setOnClickListener(this);
-        cardViewSPKeluar.setOnClickListener(this);
-        cardViewSUMasuk.setOnClickListener(this);
+        cardViewSuratPengantarKeluar.setOnClickListener(this);
+        cardViewSuratMasukUndangan.setOnClickListener(this);
         cardViewSuratPerintah.setOnClickListener(this);
         cardViewSuratKeputsan.setOnClickListener(this);
         cardViewNodin.setOnClickListener(this);
@@ -224,29 +224,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        Call<SPKeluarModel.SPKeluarDataModel> callSPKeluar = APIService.Factory.create().allSPKeluar(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callSPKeluar.enqueue(new Callback<SPKeluarModel.SPKeluarDataModel>() {
+        Call<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel> callSuratPengantarKeluar = APIService.Factory.create().allSuratPengantarKeluar(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callSuratPengantarKeluar.enqueue(new Callback<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel>() {
             @Override
-            public void onResponse(Call<SPKeluarModel.SPKeluarDataModel> call, Response<SPKeluarModel.SPKeluarDataModel> response) {
-                List<SPKeluarModel> list = response.body().getResults();
-                spKeluarCount.setText(String.valueOf(list.size()));
+            public void onResponse(Call<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel> call, Response<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel> response) {
+                List<SuratPengantarKeluarModel> list = response.body().getResults();
+                suratPengantarKeluarCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SPKeluarModel.SPKeluarDataModel> call, Throwable t) {
-                spKeluarCount.setText("0");
+            public void onFailure(Call<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel> call, Throwable t) {
+                suratPengantarKeluarCount.setText("0");
             }
         });
 
-        Call<SUMasukModel.SUMasukDataModel> callSUMasuk = APIService.Factory.create().allSUMasuk(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callSUMasuk.enqueue(new Callback<SUMasukModel.SUMasukDataModel>() {
+        Call<SuratMasukUndanganModel.SuratMasukUndanganDataModel> callSuratMasukUndangan = APIService.Factory.create().allSuratMasukUndangan(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callSuratMasukUndangan.enqueue(new Callback<SuratMasukUndanganModel.SuratMasukUndanganDataModel>() {
             @Override
-            public void onResponse(Call<SUMasukModel.SUMasukDataModel> call, Response<SUMasukModel.SUMasukDataModel> response) {
-                List<SUMasukModel> list = response.body().getResults();
-                suMasukCount.setText(String.valueOf(list.size()));
+            public void onResponse(Call<SuratMasukUndanganModel.SuratMasukUndanganDataModel> call, Response<SuratMasukUndanganModel.SuratMasukUndanganDataModel> response) {
+                List<SuratMasukUndanganModel> list = response.body().getResults();
+                suratMasukUndanganCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SUMasukModel.SUMasukDataModel> call, Throwable t) {
-                suMasukCount.setText("0");
+            public void onFailure(Call<SuratMasukUndanganModel.SuratMasukUndanganDataModel> call, Throwable t) {
+                suratMasukUndanganCount.setText("0");
             }
         });
 
@@ -407,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent2);
         }
 
-        if (v == cardViewSPKeluar)
+        if (v == cardViewSuratPengantarKeluar)
         {
             Intent intent3 = new Intent(MainActivity.this, TransaksiActivity.class);
             intent3.putExtra("position", 2);
@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent3);
         }
 
-        if (v == cardViewSUMasuk)
+        if (v == cardViewSuratMasukUndangan)
         {
             Intent intent4 = new Intent(MainActivity.this, TransaksiActivity.class);
             intent4.putExtra("position", 3);

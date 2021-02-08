@@ -54,6 +54,20 @@
             android:text="HAPUS"
             android:textSize="18sp" />
 
+<!--        <TextView-->
+<!--            android:id="@+id/dialog_download"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:background="?selectableItemBackground"-->
+<!--            android:drawableStart="@drawable/ic_download"-->
+<!--            android:drawablePadding="16dp"-->
+<!--            android:fontFamily="sans-serif"-->
+<!--            android:padding="8dp"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:text="DOWNLOAD"-->
+<!--            android:textSize="18sp" />-->
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

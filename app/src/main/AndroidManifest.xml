@@ -14,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.transaksi.InsertSumasukActivity" />
-        <activity android:name=".ui.transaksi.InsertSpkeluarActivity" />
+        <activity android:name=".ui.transaksi.suratmasukundangan.InsertSuratMasukUndanganActivity" />
+        <activity android:name=".ui.transaksi.suratpengantarkeluar.InsertSuratPengantarkeluarActivity" />
         <activity android:name=".ui.transaksi.suratkeluar.InsertSuratKeluarActivity" />
         <activity android:name=".ui.referensi.InsertReferensiActivity" />
         <activity android:name=".ui.transaksi.suratmasuk.InsertSuratMasukActivity" />
@@ -30,8 +30,8 @@
 
         <activity android:name=".ui.transaksi.suratmasuk.UpdateSuratMasukActivity" />
         <activity android:name=".ui.transaksi.suratkeluar.UpdateSuratKeluarActivity" />
-        <activity android:name=".ui.transaksi.UpdateSumasukActivity" />
-        <activity android:name=".ui.transaksi.UpdateSpkeluarActivity" />
+        <activity android:name=".ui.transaksi.suratmasukundangan.UpdateSuratMasukUndanganActivity" />
+        <activity android:name=".ui.transaksi.suratpengantarkeluar.UpdateSuratPengantarkeluarActivity" />
         <activity android:name=".ui.transaksi.suratperintah.UpdateSuratPerintahActivity" />
         <activity android:name=".ui.transaksi.suratkeputusan.UpdateSuratKeputusanActivity" />
         <activity android:name=".ui.transaksi.nodin.UpdateNodinActivity" />

@@ -1,8 +1,6 @@
 package com.erwintobing15.disposisi.model;
 
-import java.util.List;
-
-public class SPKeluarModel {
+public class SelectSuratPengantarKeluarModel {
 
     private String id;
     private String no_agenda;
@@ -94,17 +92,4 @@ public class SPKeluarModel {
     public void setId_user(String id_user) {
         this.id_user = id_user;
     }
-
-    public class SPKeluarDataModel extends MessageModel {
-        private List<SPKeluarModel> results;
-
-        public List<SPKeluarModel> getResults() {
-            return results;
-        }
-
-        public void setResults(List<SPKeluarModel> results) {
-            this.results = results;
-        }
-    }
-
 }

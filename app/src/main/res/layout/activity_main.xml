@@ -184,7 +184,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Surat Undangan Masuk"
+                            android:text="Surat Masuk Undangan"
                             android:textColor="#6f6f6f"
                             android:textSize="10sp" />
                     </LinearLayout>

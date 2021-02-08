@@ -30,14 +30,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.erwintobing15.disposisi.R;
-import com.erwintobing15.disposisi.adapter.TspkeluarAdapter;
-import com.erwintobing15.disposisi.adapter.TsumasukAdapter;
+import com.erwintobing15.disposisi.adapter.TsuratpengantarkeluarAdapter;
+import com.erwintobing15.disposisi.adapter.TsuratmasukundanganAdapter;
 import com.erwintobing15.disposisi.adapter.TsuratkeluarAdapter;
 import com.erwintobing15.disposisi.adapter.TsuratlainAdapter;
 import com.erwintobing15.disposisi.adapter.TsuratmasukAdapter;
 import com.erwintobing15.disposisi.model.MessageModel;
-import com.erwintobing15.disposisi.model.SPKeluarModel;
-import com.erwintobing15.disposisi.model.SUMasukModel;
+import com.erwintobing15.disposisi.model.SuratPengantarKeluarModel;
+import com.erwintobing15.disposisi.model.SuratMasukUndanganModel;
 import com.erwintobing15.disposisi.model.SuratKeluarModel;
 import com.erwintobing15.disposisi.model.SuratLainModel;
 import com.erwintobing15.disposisi.model.SuratMasukModel;
@@ -63,8 +63,12 @@ import com.erwintobing15.disposisi.ui.transaksi.suratketerangan.InsertSuratKeter
 import com.erwintobing15.disposisi.ui.transaksi.suratketerangan.UpdateSuratKeteranganActivity;
 import com.erwintobing15.disposisi.ui.transaksi.suratmasuk.InsertSuratMasukActivity;
 import com.erwintobing15.disposisi.ui.transaksi.suratmasuk.UpdateSuratMasukActivity;
+import com.erwintobing15.disposisi.ui.transaksi.suratpengantarkeluar.InsertSuratPengantarkeluarActivity;
+import com.erwintobing15.disposisi.ui.transaksi.suratpengantarkeluar.UpdateSuratPengantarkeluarActivity;
 import com.erwintobing15.disposisi.ui.transaksi.suratperintah.InsertSuratPerintahActivity;
 import com.erwintobing15.disposisi.ui.transaksi.suratperintah.UpdateSuratPerintahActivity;
+import com.erwintobing15.disposisi.ui.transaksi.suratmasukundangan.InsertSuratMasukUndanganActivity;
+import com.erwintobing15.disposisi.ui.transaksi.suratmasukundangan.UpdateSuratMasukUndanganActivity;
 import com.erwintobing15.disposisi.util.SessionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -78,8 +82,8 @@ import retrofit2.Response;
 
 public class TransaksiActivity extends AppCompatActivity implements TsuratmasukAdapter.Listener,
                                                                     TsuratkeluarAdapter.Listener,
-                                                                    TspkeluarAdapter.Listener,
-                                                                    TsumasukAdapter.Listener,
+                                                                    TsuratpengantarkeluarAdapter.Listener,
+                                                                    TsuratmasukundanganAdapter.Listener,
                                                                     TsuratlainAdapter.Listener,
                                                                     AdapterView.OnItemSelectedListener {
 
@@ -90,8 +94,8 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     private RecyclerView recyclerViewTransaksi;
     private TsuratmasukAdapter adapter1;
     private TsuratkeluarAdapter adapter2;
-    private TspkeluarAdapter adapter3;
-    private TsumasukAdapter adapter4;
+    private TsuratpengantarkeluarAdapter adapter3;
+    private TsuratmasukundanganAdapter adapter4;
     private TsuratlainAdapter adapter5;
     private ProgressBar progressBar;
     private FloatingActionButton floatingActionButtonAdd;
@@ -139,7 +143,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
         progressBar = findViewById(R.id.progressbar);
         spinner = findViewById(R.id.spinner);
         floatingActionButtonAdd = findViewById(R.id.fab_transaksi);
-        navigationView = (NavigationView) findViewById(R.id.navigation_menu_transaksi);
+        navigationView = findViewById(R.id.navigation_menu_transaksi);
         swLayout = findViewById(R.id.refresh);
     }
 
@@ -166,10 +170,10 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                                 loadAllTsuratkeluar();
                                 break;
                             case "Surat Pengantar Keluar":
-                                loadAllTspkeluar();
+                                loadAllTsuratpengantarkeluar();
                                 break;
                             case "Surat Undangan Masuk":
-                                loadAllTsumasuk();
+                                loadAllTsuratmasukundangan();
                                 break;
                             case "Surat Perintah":
                                 loadAllTsuratperintah();
@@ -283,12 +287,12 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                 loadAllTsuratkeluar();
                 break;
             case "Surat Pengantar Keluar":
-                initTspkeluarRecyclerView();
-                loadAllTspkeluar();
+                initTsuratpengantarkeluarRecyclerView();
+                loadAllTsuratpengantarkeluar();
                 break;
-            case "Surat Undangan Masuk":
-                initTsumasukRecyclerView();
-                loadAllTsumasuk();
+            case "Surat Masuk Undangan":
+                initTsuratmasukundanganRecyclerView();
+                loadAllTsuratmasukundangan();
                 break;
             case "Surat Perintah":
                 initTsuratperintahRecyclerView();
@@ -351,12 +355,12 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                         startActivityForResult(intent2, 1002);
                         break;
                     case "Surat Pengantar Keluar":
-                        Intent intent3 = new Intent(TransaksiActivity.this, InsertSpkeluarActivity.class);
+                        Intent intent3 = new Intent(TransaksiActivity.this, InsertSuratPengantarkeluarActivity.class);
                         intent3.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivityForResult(intent3, 1003);
                         break;
                     case "Surat Undangan Masuk":
-                        Intent intent4 = new Intent(TransaksiActivity.this, InsertSumasukActivity.class);
+                        Intent intent4 = new Intent(TransaksiActivity.this, InsertSuratMasukUndanganActivity.class);
                         intent4.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivityForResult(intent4, 1004);
                         break;
@@ -464,6 +468,17 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
 
         TextView textViewEdit = dialog.findViewById(R.id.dialog_edit);
         TextView textViewDelete = dialog.findViewById(R.id.dialog_delete);
+//        TextView textViewDownload = dialog.findViewById(R.id.dialog_download);
+
+
+//        textViewDownload.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//
+//            }
+//        });
 
 
         textViewEdit.setOnClickListener(new View.OnClickListener() {
@@ -474,6 +489,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                 startActivity(intent);
             }
         });
+
 
         textViewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -654,36 +670,36 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     /**
-     * Initialize and load surat pengantar keluar (spkeluar) adapter UI
+     * Initialize and load surat pengantar keluar (suratpengantarkeluar) adapter UI
      *
      */
 
-    private void initTspkeluarRecyclerView() {
+    private void initTsuratpengantarkeluarRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
             @Override
             public RecyclerView.LayoutParams generateDefaultLayoutParams() {
                 return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             }
         };
-        adapter3 = new TspkeluarAdapter(this, new ArrayList<SPKeluarModel>(), (TspkeluarAdapter.Listener) this);
+        adapter3 = new TsuratpengantarkeluarAdapter(this, new ArrayList<SuratPengantarKeluarModel>(), (TsuratpengantarkeluarAdapter.Listener) this);
         recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
         recyclerViewTransaksi.setAdapter(adapter3);
     }
 
-    private void loadAllTspkeluar() {
+    private void loadAllTsuratpengantarkeluar() {
         progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SPKeluarModel.SPKeluarDataModel> call = APIService.Factory.create().allSPKeluar(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SPKeluarModel.SPKeluarDataModel>() {
+        Call<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel> call = APIService.Factory.create().allSuratPengantarKeluar(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel>() {
             @Override
-            public void onResponse(Call<SPKeluarModel.SPKeluarDataModel> call, Response<SPKeluarModel.SPKeluarDataModel> response) {
+            public void onResponse(Call<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel> call, Response<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel> response) {
                 progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter3.replaceData(response.body().getResults());
             }
             @Override
-            public void onFailure(Call<SPKeluarModel.SPKeluarDataModel> call, Throwable t) {
+            public void onFailure(Call<SuratPengantarKeluarModel.SuratPengantarKeluarDataModel> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -696,7 +712,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
      */
 
     @Override
-    public void onTspkeluarClick(final String id) {
+    public void onTsuratpengantarkeluarClick(final String id) {
         final Dialog dialog = new Dialog(this);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.dialog_edit_delete);
@@ -712,7 +728,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
         textViewEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TransaksiActivity.this, UpdateSpkeluarActivity.class);
+                Intent intent = new Intent(TransaksiActivity.this, UpdateSuratPengantarkeluarActivity.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }
@@ -733,12 +749,12 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                         // Delete file when user clicked the Yes button
                         progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
 
-                        Call<MessageModel> call = APIService.Factory.create().postDeleteSPKeluar(id);
+                        Call<MessageModel> call = APIService.Factory.create().postDeleteSuratPengantarKeluar(id);
                         call.enqueue(new Callback<MessageModel>() {
                             @Override
                             public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                                 progressDialog.dismiss();
-                                loadAllTspkeluar();
+                                loadAllTsuratpengantarkeluar();
                                 Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                             }
 
@@ -771,41 +787,41 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     @Override
-    public void onTspkeluarLongClick(String id) {
+    public void onTsuratpengantarkeluarLongClick(String id) {
 
     }
 
     /**
-     * Initialize and load surat undangan masuk (sumasuk) adapter UI
+     * Initialize and load surat undangan masuk (suratmasukundangan) adapter UI
      *
      */
 
-    private void initTsumasukRecyclerView() {
+    private void initTsuratmasukundanganRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
             @Override
             public RecyclerView.LayoutParams generateDefaultLayoutParams() {
                 return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             }
         };
-        adapter4 = new TsumasukAdapter(this, new ArrayList<SUMasukModel>(), (TsumasukAdapter.Listener) this);
+        adapter4 = new TsuratmasukundanganAdapter(this, new ArrayList<SuratMasukUndanganModel>(), (TsuratmasukundanganAdapter.Listener) this);
         recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
         recyclerViewTransaksi.setAdapter(adapter4);
     }
 
-    private void loadAllTsumasuk() {
+    private void loadAllTsuratmasukundangan() {
         progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SUMasukModel.SUMasukDataModel> call = APIService.Factory.create().allSUMasuk(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SUMasukModel.SUMasukDataModel>() {
+        Call<SuratMasukUndanganModel.SuratMasukUndanganDataModel> call = APIService.Factory.create().allSuratMasukUndangan(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<SuratMasukUndanganModel.SuratMasukUndanganDataModel>() {
             @Override
-            public void onResponse(Call<SUMasukModel.SUMasukDataModel> call, Response<SUMasukModel.SUMasukDataModel> response) {
+            public void onResponse(Call<SuratMasukUndanganModel.SuratMasukUndanganDataModel> call, Response<SuratMasukUndanganModel.SuratMasukUndanganDataModel> response) {
                 progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter4.replaceData(response.body().getResults());
             }
             @Override
-            public void onFailure(Call<SUMasukModel.SUMasukDataModel> call, Throwable t) {
+            public void onFailure(Call<SuratMasukUndanganModel.SuratMasukUndanganDataModel> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -813,12 +829,12 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     /**
-     * Surat undangan masuk onclick listener handler
+     * Surat masuk undangan onclick listener handler
      * insert, update, and delete data
      */
 
     @Override
-    public void onTsumasukClick(final String id) {
+    public void onTsuratmasukundanganClick(final String id) {
 
         final Dialog dialog = new Dialog(this);
         dialog.setCancelable(true);
@@ -835,7 +851,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
         textViewEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TransaksiActivity.this, UpdateSumasukActivity.class);
+                Intent intent = new Intent(TransaksiActivity.this, UpdateSuratMasukUndanganActivity.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }
@@ -856,12 +872,12 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                         // Delete file when user clicked the Yes button
                         progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
 
-                        Call<MessageModel> call = APIService.Factory.create().postdeleteSUMasuk(id);
+                        Call<MessageModel> call = APIService.Factory.create().postdeleteSuratMasukUndangan(id);
                         call.enqueue(new Callback<MessageModel>() {
                             @Override
                             public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                                 progressDialog.dismiss();
-                                loadAllTsumasuk();
+                                loadAllTsuratmasukundangan();
                                 Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                             }
 
@@ -894,7 +910,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     @Override
-    public void onTsumasukLongClick(String id) {
+    public void onTsuratmasukundanganLongClick(String id) {
 
     }
 
