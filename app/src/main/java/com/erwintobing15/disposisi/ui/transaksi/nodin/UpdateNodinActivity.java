@@ -32,7 +32,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.MessageModel;
-import com.erwintobing15.disposisi.model.SelectSuratLainModel;
+import com.erwintobing15.disposisi.model.SelectNodinModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.util.FileUtil;
 import com.erwintobing15.disposisi.util.Imageutils;
@@ -150,10 +150,10 @@ public class UpdateNodinActivity extends AppCompatActivity implements Imageutils
 
     private void loadViews(String id) {
 
-        Call<SelectSuratLainModel> call = APIService.Factory.create().oneNodin(id);
-        call.enqueue(new Callback<SelectSuratLainModel>() {
+        Call<SelectNodinModel> call = APIService.Factory.create().oneNodin(id);
+        call.enqueue(new Callback<SelectNodinModel>() {
             @Override
-            public void onResponse(Call<SelectSuratLainModel> call, Response<SelectSuratLainModel> response) {
+            public void onResponse(Call<SelectNodinModel> call, Response<SelectNodinModel> response) {
                 progressDialog.dismiss();
                 editTextNoAgenda.setText(response.body().getNo_agenda());
                 editTextTujuan.setText(response.body().getTujuan());
@@ -166,13 +166,13 @@ public class UpdateNodinActivity extends AppCompatActivity implements Imageutils
                 // load images
                 imageViewFoto.setVisibility(View.VISIBLE);
                 Glide.with(UpdateNodinActivity.this)
-                        .load(Constants.IMAGES_URL+"surat_lain/"+response.body().getFile())
+                        .load(Constants.IMAGES_URL+"nodin/"+response.body().getFile())
                         .apply(new RequestOptions().error(R.drawable.doc))
                         .into(imageViewFoto);
             }
 
             @Override
-            public void onFailure(Call<SelectSuratLainModel> call, Throwable t) {
+            public void onFailure(Call<SelectNodinModel> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(UpdateNodinActivity.this, "Koneksi gagal", Toast.LENGTH_SHORT).show();
             }

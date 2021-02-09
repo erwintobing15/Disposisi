@@ -32,7 +32,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.MessageModel;
-import com.erwintobing15.disposisi.model.SelectSuratLainModel;
+import com.erwintobing15.disposisi.model.SelectAgendaMouModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.util.FileUtil;
 import com.erwintobing15.disposisi.util.Imageutils;
@@ -150,10 +150,10 @@ public class UpdateAgendaMouActivity extends AppCompatActivity implements Imageu
 
     private void loadViews(String id) {
 
-        Call<SelectSuratLainModel> call = APIService.Factory.create().oneAgendaMou(id);
-        call.enqueue(new Callback<SelectSuratLainModel>() {
+        Call<SelectAgendaMouModel> call = APIService.Factory.create().oneAgendaMou(id);
+        call.enqueue(new Callback<SelectAgendaMouModel>() {
             @Override
-            public void onResponse(Call<SelectSuratLainModel> call, Response<SelectSuratLainModel> response) {
+            public void onResponse(Call<SelectAgendaMouModel> call, Response<SelectAgendaMouModel> response) {
                 progressDialog.dismiss();
                 editTextNoAgenda.setText(response.body().getNo_agenda());
                 editTextTujuan.setText(response.body().getTujuan());
@@ -166,13 +166,13 @@ public class UpdateAgendaMouActivity extends AppCompatActivity implements Imageu
                 // load images
                 imageViewFoto.setVisibility(View.VISIBLE);
                 Glide.with(UpdateAgendaMouActivity.this)
-                        .load(Constants.IMAGES_URL+"surat_lain/"+response.body().getFile())
+                        .load(Constants.IMAGES_URL+"mou/"+response.body().getFile())
                         .apply(new RequestOptions().error(R.drawable.doc))
                         .into(imageViewFoto);
             }
 
             @Override
-            public void onFailure(Call<SelectSuratLainModel> call, Throwable t) {
+            public void onFailure(Call<SelectAgendaMouModel> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(UpdateAgendaMouActivity.this, "Koneksi gagal", Toast.LENGTH_SHORT).show();
             }

@@ -30,17 +30,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.erwintobing15.disposisi.R;
+import com.erwintobing15.disposisi.adapter.TagendamouAdapter;
+import com.erwintobing15.disposisi.adapter.TbastAdapter;
+import com.erwintobing15.disposisi.adapter.TnodinAdapter;
+import com.erwintobing15.disposisi.adapter.TperjanjiankerjasamaAdapter;
+import com.erwintobing15.disposisi.adapter.TsptjmAdapter;
+import com.erwintobing15.disposisi.adapter.TsuratkeputusanAdapter;
+import com.erwintobing15.disposisi.adapter.TsuratketeranganAdapter;
 import com.erwintobing15.disposisi.adapter.TsuratpengantarkeluarAdapter;
 import com.erwintobing15.disposisi.adapter.TsuratmasukundanganAdapter;
 import com.erwintobing15.disposisi.adapter.TsuratkeluarAdapter;
-import com.erwintobing15.disposisi.adapter.TsuratlainAdapter;
 import com.erwintobing15.disposisi.adapter.TsuratmasukAdapter;
+import com.erwintobing15.disposisi.adapter.TsuratperintahAdapter;
+
+import com.erwintobing15.disposisi.model.AgendaMouModel;
+import com.erwintobing15.disposisi.model.BastModel;
 import com.erwintobing15.disposisi.model.MessageModel;
+import com.erwintobing15.disposisi.model.NodinModel;
+import com.erwintobing15.disposisi.model.PerjanjianKerjasamaModel;
+import com.erwintobing15.disposisi.model.SptjmModel;
+import com.erwintobing15.disposisi.model.SuratKeputusanModel;
+import com.erwintobing15.disposisi.model.SuratKeteranganModel;
 import com.erwintobing15.disposisi.model.SuratPengantarKeluarModel;
 import com.erwintobing15.disposisi.model.SuratMasukUndanganModel;
 import com.erwintobing15.disposisi.model.SuratKeluarModel;
-import com.erwintobing15.disposisi.model.SuratLainModel;
 import com.erwintobing15.disposisi.model.SuratMasukModel;
+import com.erwintobing15.disposisi.model.SuratPerintahModel;
+
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.ui.beranda.LoginActivity;
 import com.erwintobing15.disposisi.ui.beranda.MainActivity;
@@ -84,7 +100,14 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                                                                     TsuratkeluarAdapter.Listener,
                                                                     TsuratpengantarkeluarAdapter.Listener,
                                                                     TsuratmasukundanganAdapter.Listener,
-                                                                    TsuratlainAdapter.Listener,
+                                                                    TsuratperintahAdapter.Listener,
+                                                                    TsuratkeputusanAdapter.Listener,
+                                                                    TnodinAdapter.Listener,
+                                                                    TperjanjiankerjasamaAdapter.Listener,
+                                                                    TagendamouAdapter.Listener,
+                                                                    TsptjmAdapter.Listener,
+                                                                    TbastAdapter.Listener,
+                                                                    TsuratketeranganAdapter.Listener,
                                                                     AdapterView.OnItemSelectedListener {
 
     private DrawerLayout drawerLayout;
@@ -92,11 +115,20 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     private NavigationView navigationView;
     private Spinner spinner;
     private RecyclerView recyclerViewTransaksi;
+
     private TsuratmasukAdapter adapter1;
     private TsuratkeluarAdapter adapter2;
     private TsuratpengantarkeluarAdapter adapter3;
     private TsuratmasukundanganAdapter adapter4;
-    private TsuratlainAdapter adapter5;
+    private TsuratperintahAdapter adapter5;
+    private TsuratkeputusanAdapter adapter6;
+    private TnodinAdapter adapter7;
+    private TperjanjiankerjasamaAdapter adapter8;
+    private TagendamouAdapter adapter9;
+    private TsptjmAdapter adapter10;
+    private TbastAdapter adapter11;
+    private TsuratketeranganAdapter adapter12;
+
     private ProgressBar progressBar;
     private FloatingActionButton floatingActionButtonAdd;
     private ProgressDialog progressDialog;
@@ -266,7 +298,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     /**
-     * load views on spinner selected
+     * load views based on spinner selected
      *
      * @param parent
      * @param view
@@ -303,27 +335,27 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                 loadAllTsuratkeputusan();
                 break;
             case "Nodin":
-                initTsuratperintahRecyclerView();
+                initTnodinRecyclerView();
                 loadAllTnodin();
                 break;
             case "Perjanjian Kerjasama":
-                initTsuratperintahRecyclerView();
+                initTperjanjiankerjasamaRecyclerView();
                 loadAllTperjanjiankerjasama();
                 break;
             case "Agenda MOU":
-                initTsuratperintahRecyclerView();
+                initTagendamouRecyclerView();
                 loadAllTagendamou();
                 break;
             case "SPTJM":
-                initTsuratperintahRecyclerView();
+                initTsptjmRecyclerView();
                 loadAllTsptjm();
                 break;
             case "BAST":
-                initTsuratperintahRecyclerView();
+                initTbastRecyclerView();
                 loadAllTbast();
                 break;
             case "Surat Keterangan":
-                initTsuratperintahRecyclerView();
+                initTsuratketeranganRecyclerView();
                 loadAllTsuratketerangan();
                 break;
         }
@@ -792,7 +824,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     }
 
     /**
-     * Initialize and load surat undangan masuk (suratmasukundangan) adapter UI
+     * Initialize and load surat masuk undangan adapter UI
      *
      */
 
@@ -914,9 +946,10 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
 
     }
 
+
     /**
      * Initialize and load adapter UI view for surat perintah
-     *
+     * Surat perintah onClick handler
      */
 
     private void initTsuratperintahRecyclerView() {
@@ -926,7 +959,7 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                 return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             }
         };
-        adapter5 = new TsuratlainAdapter(this, new ArrayList<SuratLainModel>(), (TsuratlainAdapter.Listener) this);
+        adapter5 = new TsuratperintahAdapter(this, new ArrayList<SuratPerintahModel>(), (TsuratperintahAdapter.Listener) this);
         recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
         recyclerViewTransaksi.setAdapter(adapter5);
     }
@@ -934,26 +967,105 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
     private void loadAllTsuratperintah() {
         progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allSuratPerintah(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<SuratPerintahModel.SuratPerintahDataModel> call = APIService.Factory.create().allSuratPerintah(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<SuratPerintahModel.SuratPerintahDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
+            public void onResponse(Call<SuratPerintahModel.SuratPerintahDataModel> call, Response<SuratPerintahModel.SuratPerintahDataModel> response) {
                 progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
                 adapter5.replaceData(response.body().getResults());
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<SuratPerintahModel.SuratPerintahDataModel> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    @Override
+    public void onTsuratperintahClick(final String id) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_edit_delete);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        TextView textViewEdit = dialog.findViewById(R.id.dialog_edit);
+        TextView textViewDelete = dialog.findViewById(R.id.dialog_delete);
+
+        textViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransaksiActivity.this, UpdateSuratPerintahActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+
+        textViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                // Build an Alert Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
+                builder.setTitle("Hapus Surat Perintah");
+                builder.setMessage("Apakah anda yakin ingin menghapus surat?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        // Delete file when user clicked the Yes button
+                        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
+
+                        Call<MessageModel> call = APIService.Factory.create().postdeleteSuratPerintah(id);
+                        call.enqueue(new Callback<MessageModel>() {
+                            @Override
+                            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                                progressDialog.dismiss();
+                                loadAllTsuratperintah();
+                                Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<MessageModel> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Log.e("ERROR", t.getMessage());
+                                Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+                // Set the alert dialog no button click listener
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do something when No button clicked
+                        Toast.makeText(getApplicationContext(),
+                                "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    public void onTsuratperintahLongClick(String id) {
+
+    }
+
     /**
      * Initialize and load adapter UI view for surat keputusan
-     *
+     * Surat keputusan onClick handler
      */
 
     private void initTsuratkeputusanRecyclerView() {
@@ -963,189 +1075,33 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
                 return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             }
         };
-        adapter5 = new TsuratlainAdapter(this, new ArrayList<SuratLainModel>(), (TsuratlainAdapter.Listener) this);
+        adapter6 = new TsuratkeputusanAdapter(this, new ArrayList<SuratKeputusanModel>(), (TsuratkeputusanAdapter.Listener) this);
         recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
-        recyclerViewTransaksi.setAdapter(adapter5);
+        recyclerViewTransaksi.setAdapter(adapter6);
     }
 
     private void loadAllTsuratkeputusan() {
         progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
         recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allSuratKeputusan(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<SuratKeputusanModel.SuratKeputusanDataModel> call = APIService.Factory.create().allSuratKeputusan(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<SuratKeputusanModel.SuratKeputusanDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
+            public void onResponse(Call<SuratKeputusanModel.SuratKeputusanDataModel> call, Response<SuratKeputusanModel.SuratKeputusanDataModel> response) {
                 progressDialog.dismiss();
                 recyclerViewTransaksi.setVisibility(View.VISIBLE);
                 assert response.body() != null;
-                adapter5.replaceData(response.body().getResults());
+                adapter6.replaceData(response.body().getResults());
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<SuratKeputusanModel.SuratKeputusanDataModel> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-    /**
-     * Initialize and load adapter UI view for nodin
-     *
-     */
-
-    private void loadAllTnodin() {
-        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
-        recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allNodin(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
-            @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressDialog.dismiss();
-                recyclerViewTransaksi.setVisibility(View.VISIBLE);
-                assert response.body() != null;
-                adapter5.replaceData(response.body().getResults());
-            }
-            @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * Initialize and load adapter UI view for perjanjian kerjasama
-     *
-     */
-
-    private void loadAllTperjanjiankerjasama() {
-        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
-        recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allPerjanjianKerjasama(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
-            @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressDialog.dismiss();
-                recyclerViewTransaksi.setVisibility(View.VISIBLE);
-                assert response.body() != null;
-                adapter5.replaceData(response.body().getResults());
-            }
-            @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * Initialize and load adapter UI view for Agenda MOU
-     *
-     */
-
-    private void loadAllTagendamou() {
-        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
-        recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allAgendaMou(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
-            @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressDialog.dismiss();
-                recyclerViewTransaksi.setVisibility(View.VISIBLE);
-                assert response.body() != null;
-                adapter5.replaceData(response.body().getResults());
-            }
-            @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * Initialize and load adapter UI view for SPTJM
-     *
-     */
-
-    private void loadAllTsptjm() {
-        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
-        recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allSptjm(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
-            @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressDialog.dismiss();
-                recyclerViewTransaksi.setVisibility(View.VISIBLE);
-                assert response.body() != null;
-                adapter5.replaceData(response.body().getResults());
-            }
-            @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * Initialize and load adapter UI view for BAST
-     *
-     */
-
-    private void loadAllTbast() {
-        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
-        recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allBast(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
-            @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressDialog.dismiss();
-                recyclerViewTransaksi.setVisibility(View.VISIBLE);
-                assert response.body() != null;
-                adapter5.replaceData(response.body().getResults());
-            }
-            @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * Initialize and load adapter UI view for Surat Keterangan
-     *
-     */
-
-    private void loadAllTsuratketerangan() {
-        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
-        recyclerViewTransaksi.setVisibility(View.GONE);
-        Call<SuratLainModel.SuratLainDataModel> call = APIService.Factory.create().allSuratKeterangan(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
-        call.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
-            @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                progressDialog.dismiss();
-                recyclerViewTransaksi.setVisibility(View.VISIBLE);
-                assert response.body() != null;
-                adapter5.replaceData(response.body().getResults());
-            }
-            @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    /**
-     * Onclick listener handler for surat perintah, surat keputusan, nodin, agenda MOU
-     * SPTJM, BAST, and surat keterangan data
-     * insert, update, and delete data
-     */
 
     @Override
-    public void onTsuratlainClick(final String id) {
+    public void onTsuratkeputusanClick(final String id) {
 
         final Dialog dialog = new Dialog(this);
         dialog.setCancelable(true);
@@ -1158,54 +1114,12 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
         TextView textViewEdit = dialog.findViewById(R.id.dialog_edit);
         TextView textViewDelete = dialog.findViewById(R.id.dialog_delete);
 
-
         textViewEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spinnerItem = spinner.getSelectedItem().toString();
-
-                switch (spinnerItem) {
-                    case "Surat Perintah":
-                        Intent intent1 = new Intent(TransaksiActivity.this, UpdateSuratPerintahActivity.class);
-                        intent1.putExtra("id", id);
-                        startActivity(intent1);
-                        break;
-                    case "Surat Keputusan":
-                        Intent intent2 = new Intent(TransaksiActivity.this, UpdateSuratKeputusanActivity.class);
-                        intent2.putExtra("id", id);
-                        startActivity(intent2);
-                        break;
-                    case "Nodin":
-                        Intent intent3 = new Intent(TransaksiActivity.this, UpdateNodinActivity.class);
-                        intent3.putExtra("id", id);
-                        startActivity(intent3);
-                        break;
-                    case "Perjanjian Kerjasama":
-                        Intent intent4 = new Intent(TransaksiActivity.this, UpdatePerjanjianKerjasamaActivity.class);
-                        intent4.putExtra("id", id);
-                        startActivity(intent4);
-                        break;
-                    case "Agenda MOU":
-                        Intent intent5 = new Intent(TransaksiActivity.this, UpdateAgendaMouActivity.class);
-                        intent5.putExtra("id", id);
-                        startActivity(intent5);
-                        break;
-                    case "SPTJM":
-                        Intent intent6 = new Intent(TransaksiActivity.this, UpdateSptjmActivity.class);
-                        intent6.putExtra("id", id);
-                        startActivity(intent6);
-                        break;
-                    case "BAST":
-                        Intent intent7 = new Intent(TransaksiActivity.this, UpdateBastActivity.class);
-                        intent7.putExtra("id", id);
-                        startActivity(intent7);
-                        break;
-                    case "Surat Keterangan":
-                        Intent intent8 = new Intent(TransaksiActivity.this, UpdateSuratKeteranganActivity.class);
-                        intent8.putExtra("id", id);
-                        startActivity(intent8);
-                        break;
-                }
+                Intent intent = new Intent(TransaksiActivity.this, UpdateSuratKeputusanActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
 
@@ -1213,468 +1127,762 @@ public class TransaksiActivity extends AppCompatActivity implements TsuratmasukA
             @Override
             public void onClick(View v) {
 
-                spinnerItem = spinner.getSelectedItem().toString();
+                dialog.dismiss();
+                // Build an Alert Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
+                builder.setTitle("Hapus Surat Keputusan");
+                builder.setMessage("Apakah anda yakin ingin menghapus surat?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        // Delete file when user clicked the Yes button
+                        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
 
-                // delete data based on spinner selected and view id clicked
-                switch (spinnerItem) {
-                    case "Surat Perintah":
-                        dialog.dismiss();
-                        Call<MessageModel> call1 = APIService.Factory.create().postdeleteSuratPerintah(id);
-                        deleteSuratPerintah(call1);
-                        break;
-                    case "Surat Keputusan":
-                        dialog.dismiss();
-                        Call<MessageModel> call2 = APIService.Factory.create().postdeleteSuratKeputusan(id);
-                        deleteSuratKeputusan(call2);
-                        break;
-                    case "Nodin":
-                        dialog.dismiss();
-                        Call<MessageModel> call3 = APIService.Factory.create().postdeleteNodin(id);
-                        deleteNodin(call3);
-                        break;
-                    case "Perjanjian Kerjasama":
-                        dialog.dismiss();
-                        Call<MessageModel> call4 = APIService.Factory.create().postdeletePerjanjianKerjasama(id);
-                        deletePerjanjianKerjasama(call4);
-                        break;
-                    case "Agenda MOU":
-                        dialog.dismiss();
-                        Call<MessageModel> call5 = APIService.Factory.create().postdeleteAgendaMou(id);
-                        deleteAgendaMou(call5);
-                        break;
-                    case "SPTJM":
-                        dialog.dismiss();
-                        Call<MessageModel> call6 = APIService.Factory.create().postdeleteSptjm(id);
-                        deleteSptjm(call6);
-                        break;
-                    case "BAST":
-                        dialog.dismiss();
-                        Call<MessageModel> call7 = APIService.Factory.create().postdeleteBast(id);
-                        deleteBast(call7);
-                        break;
-                    case "Surat Keterangan":
-                        dialog.dismiss();
-                        Call<MessageModel> call8 = APIService.Factory.create().postdeleteSuratKeterangan(id);
-                        deleteSuratKeterangan(call8);
-                        break;
-                }
+                        Call<MessageModel> call = APIService.Factory.create().postdeleteSuratKeputusan(id);
+                        call.enqueue(new Callback<MessageModel>() {
+                            @Override
+                            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                                progressDialog.dismiss();
+                                loadAllTsuratkeputusan();
+                                Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
 
+                            @Override
+                            public void onFailure(Call<MessageModel> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Log.e("ERROR", t.getMessage());
+                                Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+                // Set the alert dialog no button click listener
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do something when No button clicked
+                        Toast.makeText(getApplicationContext(),
+                                "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
         dialog.show();
     }
 
-    /**
-     * Method to delete surat perintah
-     *
-     * @param call
-     */
-
-    private void deleteSuratPerintah(final Call<MessageModel> call) {
-
-        // Build an Alert Dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
-        builder.setTitle("Hapus Surat Perintah");
-        builder.setMessage("Apakah anda yakin ingin menghapus surat?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                // Delete file when user clicked the Yes button
-                progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
-
-                call.enqueue(new Callback<MessageModel>() {
-                    @Override
-                    public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                        progressDialog.dismiss();
-                        loadAllTsuratperintah();
-                        Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<MessageModel> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Log.e("ERROR", t.getMessage());
-                        Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-
-        // Set the alert dialog no button click listener
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do something when No button clicked
-                Toast.makeText(getApplicationContext(),
-                        "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+    @Override
+    public void onTsuratkeputusanLongClick(String id) {
 
     }
 
     /**
-     * Method to delete surat keputusan
-     *
-     * @param call
+     * Initialize and load adapter UI view for surat nodin
+     * Surat nodin onClick handler
      */
 
-    private void deleteSuratKeputusan(final Call<MessageModel> call) {
-
-        // Build an Alert Dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
-        builder.setTitle("Hapus Surat Keputusan");
-        builder.setMessage("Apakah anda yakin ingin menghapus surat?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+    private void initTnodinRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
             @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                // Delete file when user clicked the Yes button
-                progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
+            public RecyclerView.LayoutParams generateDefaultLayoutParams() {
+                return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+        };
+        adapter7 = new TnodinAdapter(this, new ArrayList<NodinModel>(), (TnodinAdapter.Listener) this);
+        recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
+        recyclerViewTransaksi.setAdapter(adapter7);
+    }
 
-                call.enqueue(new Callback<MessageModel>() {
-                    @Override
-                    public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                        progressDialog.dismiss();
-                        loadAllTsuratkeputusan();
-                        Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
+    private void loadAllTnodin() {
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
+        recyclerViewTransaksi.setVisibility(View.GONE);
+        Call<NodinModel.NodinDataModel> call = APIService.Factory.create().allNodin(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<NodinModel.NodinDataModel>() {
+            @Override
+            public void onResponse(Call<NodinModel.NodinDataModel> call, Response<NodinModel.NodinDataModel> response) {
+                progressDialog.dismiss();
+                recyclerViewTransaksi.setVisibility(View.VISIBLE);
+                assert response.body() != null;
+                adapter7.replaceData(response.body().getResults());
+            }
+            @Override
+            public void onFailure(Call<NodinModel.NodinDataModel> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
+    @Override
+    public void onTnodinClick(final String id) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_edit_delete);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        TextView textViewEdit = dialog.findViewById(R.id.dialog_edit);
+        TextView textViewDelete = dialog.findViewById(R.id.dialog_delete);
+
+        textViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransaksiActivity.this, UpdateNodinActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+
+        textViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                // Build an Alert Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
+                builder.setTitle("Hapus Nodin");
+                builder.setMessage("Apakah anda yakin ingin menghapus surat?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onFailure(Call<MessageModel> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Log.e("ERROR", t.getMessage());
-                        Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                    public void onClick(final DialogInterface dialog, int which) {
+                        // Delete file when user clicked the Yes button
+                        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
+
+                        Call<MessageModel> call = APIService.Factory.create().postdeleteNodin(id);
+                        call.enqueue(new Callback<MessageModel>() {
+                            @Override
+                            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                                progressDialog.dismiss();
+                                loadAllTnodin();
+                                Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<MessageModel> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Log.e("ERROR", t.getMessage());
+                                Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
+
+                // Set the alert dialog no button click listener
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do something when No button clicked
+                        Toast.makeText(getApplicationContext(),
+                                "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
-        // Set the alert dialog no button click listener
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do something when No button clicked
-                Toast.makeText(getApplicationContext(),
-                        "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void onTnodinLongClick(String id) {
 
     }
 
     /**
-     * Method to delete nodin
-     *
-     * @param call
+     * Initialize and load adapter UI view for surat perjanjian kerjasama
+     * Surat perjanjian kerjasama onClick handler
      */
 
-    private void deleteNodin(final Call<MessageModel> call) {
-
-        // Build an Alert Dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
-        builder.setTitle("Hapus Nodin");
-        builder.setMessage("Apakah anda yakin ingin menghapus nodin?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+    private void initTperjanjiankerjasamaRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
             @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                // Delete file when user clicked the Yes button
-                progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
-
-                call.enqueue(new Callback<MessageModel>() {
-                    @Override
-                    public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                        progressDialog.dismiss();
-                        loadAllTnodin();
-                        Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<MessageModel> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Log.e("ERROR", t.getMessage());
-                        Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            public RecyclerView.LayoutParams generateDefaultLayoutParams() {
+                return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             }
-        });
-
-        // Set the alert dialog no button click listener
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do something when No button clicked
-                Toast.makeText(getApplicationContext(),
-                        "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
+        };
+        adapter8 = new TperjanjiankerjasamaAdapter(this, new ArrayList<PerjanjianKerjasamaModel>(), (TperjanjiankerjasamaAdapter.Listener) this);
+        recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
+        recyclerViewTransaksi.setAdapter(adapter8);
     }
 
-    /**
-     * Method to delete perjanjian kerjasama data
-     *
-     * @param call
-     */
-
-    private void deletePerjanjianKerjasama(final Call<MessageModel> call) {
-
-        // Build an Alert Dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
-        builder.setTitle("Hapus Perjanjian Kerjasama");
-        builder.setMessage("Apakah anda yakin ingin menghapus surat perjanjian kerjasama?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+    private void loadAllTperjanjiankerjasama() {
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
+        recyclerViewTransaksi.setVisibility(View.GONE);
+        Call<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel> call = APIService.Factory.create().allPerjanjianKerjasama(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel>() {
             @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                // Delete file when user clicked the Yes button
-                progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
-
-                call.enqueue(new Callback<MessageModel>() {
-                    @Override
-                    public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                        progressDialog.dismiss();
-                        loadAllTperjanjiankerjasama();
-                        Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<MessageModel> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Log.e("ERROR", t.getMessage());
-                        Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            public void onResponse(Call<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel> call, Response<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel> response) {
+                progressDialog.dismiss();
+                recyclerViewTransaksi.setVisibility(View.VISIBLE);
+                assert response.body() != null;
+                adapter8.replaceData(response.body().getResults());
+            }
+            @Override
+            public void onFailure(Call<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        // Set the alert dialog no button click listener
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do something when No button clicked
-                Toast.makeText(getApplicationContext(),
-                        "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
     }
 
-    /**
-     * Method to delete Agenda MOU data
-     *
-     * @param call
-     */
+    @Override
+    public void onTperjanjiankerjasamaClick(final String id) {
 
-    private void deleteAgendaMou(final Call<MessageModel> call) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_edit_delete);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        // Build an Alert Dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
-        builder.setTitle("Hapus Agenda MOU");
-        builder.setMessage("Apakah anda yakin ingin menghapus Agenda MOU?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+        TextView textViewEdit = dialog.findViewById(R.id.dialog_edit);
+        TextView textViewDelete = dialog.findViewById(R.id.dialog_delete);
+
+        textViewEdit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                // Delete file when user clicked the Yes button
-                progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
-
-                call.enqueue(new Callback<MessageModel>() {
-                    @Override
-                    public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                        progressDialog.dismiss();
-                        loadAllTagendamou();
-                        Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<MessageModel> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Log.e("ERROR", t.getMessage());
-                        Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            public void onClick(View v) {
+                Intent intent = new Intent(TransaksiActivity.this, UpdatePerjanjianKerjasamaActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
 
-        // Set the alert dialog no button click listener
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+        textViewDelete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do something when No button clicked
-                Toast.makeText(getApplicationContext(),
-                        "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
-            }
-        });
+            public void onClick(View v) {
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
-
-    /**
-     * Method to delete SPTJM data
-     *
-     * @param call
-     */
-
-    private void deleteSptjm(final Call<MessageModel> call) {
-
-        // Build an Alert Dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
-        builder.setTitle("Hapus Agenda MOU");
-        builder.setMessage("Apakah anda yakin ingin menghapus Agenda MOU?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                // Delete file when user clicked the Yes button
-                progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
-
-                call.enqueue(new Callback<MessageModel>() {
+                dialog.dismiss();
+                // Build an Alert Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
+                builder.setTitle("Hapus Perjanjian Kerjasama");
+                builder.setMessage("Apakah anda yakin ingin menghapus surat?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                        progressDialog.dismiss();
-                        loadAllTsptjm();
-                        Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                    public void onClick(final DialogInterface dialog, int which) {
+                        // Delete file when user clicked the Yes button
+                        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
 
-                    @Override
-                    public void onFailure(Call<MessageModel> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Log.e("ERROR", t.getMessage());
-                        Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                        Call<MessageModel> call = APIService.Factory.create().postdeletePerjanjianKerjasama(id);
+                        call.enqueue(new Callback<MessageModel>() {
+                            @Override
+                            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                                progressDialog.dismiss();
+                                loadAllTperjanjiankerjasama();
+                                Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<MessageModel> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Log.e("ERROR", t.getMessage());
+                                Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
-            }
-        });
 
-        // Set the alert dialog no button click listener
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do something when No button clicked
-                Toast.makeText(getApplicationContext(),
-                        "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
-
-    /**
-     * Method to delete BAST data
-     *
-     * @param call
-     */
-
-    private void deleteBast(final Call<MessageModel> call) {
-
-        // Build an Alert Dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
-        builder.setTitle("Hapus surat BAST");
-        builder.setMessage("Apakah anda yakin ingin menghapus surat BAST?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                // Delete file when user clicked the Yes button
-                progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
-
-                call.enqueue(new Callback<MessageModel>() {
+                // Set the alert dialog no button click listener
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                        progressDialog.dismiss();
-                        loadAllTbast();
-                        Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<MessageModel> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Log.e("ERROR", t.getMessage());
-                        Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do something when No button clicked
+                        Toast.makeText(getApplicationContext(),
+                                "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
                     }
                 });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
-        // Set the alert dialog no button click listener
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do something when No button clicked
-                Toast.makeText(getApplicationContext(),
-                        "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
-
-    /**
-     * Method to delete Surat keterangan data
-     *
-     * @param call
-     */
-
-    private void deleteSuratKeterangan(final Call<MessageModel> call) {
-
-        // Build an Alert Dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
-        builder.setTitle("Hapus surat keterangan");
-        builder.setMessage("Apakah anda yakin ingin menghapus surat keterangan?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                // Delete file when user clicked the Yes button
-                progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
-
-                call.enqueue(new Callback<MessageModel>() {
-                    @Override
-                    public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                        progressDialog.dismiss();
-                        loadAllTsuratketerangan();
-                        Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Call<MessageModel> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Log.e("ERROR", t.getMessage());
-                        Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-
-        // Set the alert dialog no button click listener
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do something when No button clicked
-                Toast.makeText(getApplicationContext(),
-                        "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
         dialog.show();
 
     }
 
     @Override
-    public void onTsuratlainLongClick(String id) {
+    public void onTperjanjiankerjasamaLongClick(String id) {
+
+    }
+
+    /**
+     * Initialize and load adapter UI view for agenda mou
+     * agenda mou onClick handler
+     */
+
+    private void initTagendamouRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
+            @Override
+            public RecyclerView.LayoutParams generateDefaultLayoutParams() {
+                return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+        };
+        adapter9 = new TagendamouAdapter(this, new ArrayList<AgendaMouModel>(), (TagendamouAdapter.Listener) this);
+        recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
+        recyclerViewTransaksi.setAdapter(adapter9);
+    }
+
+    private void loadAllTagendamou() {
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
+        recyclerViewTransaksi.setVisibility(View.GONE);
+        Call<AgendaMouModel.AgendaMouDataModel> call = APIService.Factory.create().allAgendaMou(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<AgendaMouModel.AgendaMouDataModel>() {
+            @Override
+            public void onResponse(Call<AgendaMouModel.AgendaMouDataModel> call, Response<AgendaMouModel.AgendaMouDataModel> response) {
+                progressDialog.dismiss();
+                recyclerViewTransaksi.setVisibility(View.VISIBLE);
+                assert response.body() != null;
+                adapter9.replaceData(response.body().getResults());
+            }
+            @Override
+            public void onFailure(Call<AgendaMouModel.AgendaMouDataModel> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onTagendamouClick(final String id) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_edit_delete);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        TextView textViewEdit = dialog.findViewById(R.id.dialog_edit);
+        TextView textViewDelete = dialog.findViewById(R.id.dialog_delete);
+
+        textViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransaksiActivity.this, UpdateAgendaMouActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+
+        textViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                // Build an Alert Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
+                builder.setTitle("Hapus Agenda MOU");
+                builder.setMessage("Apakah anda yakin ingin menghapus surat?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        // Delete file when user clicked the Yes button
+                        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
+
+                        Call<MessageModel> call = APIService.Factory.create().postdeleteAgendaMou(id);
+                        call.enqueue(new Callback<MessageModel>() {
+                            @Override
+                            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                                progressDialog.dismiss();
+                                loadAllTagendamou();
+                                Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<MessageModel> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Log.e("ERROR", t.getMessage());
+                                Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+                // Set the alert dialog no button click listener
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do something when No button clicked
+                        Toast.makeText(getApplicationContext(),
+                                "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    @Override
+    public void onTagendamouLongClick(String id) {
+
+    }
+
+    /**
+     * Initialize and load adapter UI view for SPTJM
+     * SPTJM onClick handler
+     */
+
+    private void initTsptjmRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
+            @Override
+            public RecyclerView.LayoutParams generateDefaultLayoutParams() {
+                return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+        };
+        adapter10 = new TsptjmAdapter(this, new ArrayList<SptjmModel>(), (TsptjmAdapter.Listener) this);
+        recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
+        recyclerViewTransaksi.setAdapter(adapter10);
+    }
+
+    private void loadAllTsptjm() {
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
+        recyclerViewTransaksi.setVisibility(View.GONE);
+        Call<SptjmModel.SptjmDataModel> call = APIService.Factory.create().allSptjm(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<SptjmModel.SptjmDataModel>() {
+            @Override
+            public void onResponse(Call<SptjmModel.SptjmDataModel> call, Response<SptjmModel.SptjmDataModel> response) {
+                progressDialog.dismiss();
+                recyclerViewTransaksi.setVisibility(View.VISIBLE);
+                assert response.body() != null;
+                adapter10.replaceData(response.body().getResults());
+            }
+            @Override
+            public void onFailure(Call<SptjmModel.SptjmDataModel> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onTsptjmClick(final String id) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_edit_delete);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        TextView textViewEdit = dialog.findViewById(R.id.dialog_edit);
+        TextView textViewDelete = dialog.findViewById(R.id.dialog_delete);
+
+        textViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransaksiActivity.this, UpdateSptjmActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+
+        textViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                // Build an Alert Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
+                builder.setTitle("Hapus SPTJM");
+                builder.setMessage("Apakah anda yakin ingin menghapus surat?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        // Delete file when user clicked the Yes button
+                        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
+
+                        Call<MessageModel> call = APIService.Factory.create().postdeleteSptjm(id);
+                        call.enqueue(new Callback<MessageModel>() {
+                            @Override
+                            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                                progressDialog.dismiss();
+                                loadAllTsptjm();
+                                Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<MessageModel> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Log.e("ERROR", t.getMessage());
+                                Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+                // Set the alert dialog no button click listener
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do something when No button clicked
+                        Toast.makeText(getApplicationContext(),
+                                "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    @Override
+    public void onTsptjmLongClick(String id) {
+
+    }
+
+    /**
+     * Initialize and load adapter UI view for BAST
+     * BAST onClick handler
+     */
+
+    private void initTbastRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
+            @Override
+            public RecyclerView.LayoutParams generateDefaultLayoutParams() {
+                return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+        };
+        adapter11 = new TbastAdapter(this, new ArrayList<BastModel>(), (TbastAdapter.Listener) this);
+        recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
+        recyclerViewTransaksi.setAdapter(adapter11);
+    }
+
+    private void loadAllTbast() {
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
+        recyclerViewTransaksi.setVisibility(View.GONE);
+        Call<BastModel.BastDataModel> call = APIService.Factory.create().allBast(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<BastModel.BastDataModel>() {
+            @Override
+            public void onResponse(Call<BastModel.BastDataModel> call, Response<BastModel.BastDataModel> response) {
+                progressDialog.dismiss();
+                recyclerViewTransaksi.setVisibility(View.VISIBLE);
+                assert response.body() != null;
+                adapter11.replaceData(response.body().getResults());
+            }
+            @Override
+            public void onFailure(Call<BastModel.BastDataModel> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onTbastClick(final String id) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_edit_delete);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        TextView textViewEdit = dialog.findViewById(R.id.dialog_edit);
+        TextView textViewDelete = dialog.findViewById(R.id.dialog_delete);
+
+        textViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransaksiActivity.this, UpdateBastActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+
+        textViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                // Build an Alert Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
+                builder.setTitle("Hapus BAST");
+                builder.setMessage("Apakah anda yakin ingin menghapus surat?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        // Delete file when user clicked the Yes button
+                        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
+
+                        Call<MessageModel> call = APIService.Factory.create().postdeleteBast(id);
+                        call.enqueue(new Callback<MessageModel>() {
+                            @Override
+                            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                                progressDialog.dismiss();
+                                loadAllTbast();
+                                Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<MessageModel> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Log.e("ERROR", t.getMessage());
+                                Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+                // Set the alert dialog no button click listener
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do something when No button clicked
+                        Toast.makeText(getApplicationContext(),
+                                "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    @Override
+    public void onTbastLongClick(String id) {
+
+    }
+
+    /**
+     * Initialize and load adapter UI view for surat keterangan
+     * surat keterangan onClick handler
+     */
+
+    private void initTsuratketeranganRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this){
+            @Override
+            public RecyclerView.LayoutParams generateDefaultLayoutParams() {
+                return new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            }
+        };
+        adapter12 = new TsuratketeranganAdapter(this, new ArrayList<SuratKeteranganModel>(), (TsuratketeranganAdapter.Listener) this);
+        recyclerViewTransaksi.setLayoutManager(linearLayoutManager);
+        recyclerViewTransaksi.setAdapter(adapter12);
+    }
+
+    private void loadAllTsuratketerangan() {
+        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Load data.....", true, false);
+        recyclerViewTransaksi.setVisibility(View.GONE);
+        Call<SuratKeteranganModel.SuratKeteranganDataModel> call = APIService.Factory.create().allSuratKeterangan(SessionUtils.getLoggedUser(TransaksiActivity.this).getId());
+        call.enqueue(new Callback<SuratKeteranganModel.SuratKeteranganDataModel>() {
+            @Override
+            public void onResponse(Call<SuratKeteranganModel.SuratKeteranganDataModel> call, Response<SuratKeteranganModel.SuratKeteranganDataModel> response) {
+                progressDialog.dismiss();
+                recyclerViewTransaksi.setVisibility(View.VISIBLE);
+                assert response.body() != null;
+                adapter12.replaceData(response.body().getResults());
+            }
+            @Override
+            public void onFailure(Call<SuratKeteranganModel.SuratKeteranganDataModel> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(TransaksiActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onTsuratketeranganClick(final String id) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_edit_delete);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        TextView textViewEdit = dialog.findViewById(R.id.dialog_edit);
+        TextView textViewDelete = dialog.findViewById(R.id.dialog_delete);
+
+        textViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TransaksiActivity.this, UpdateSuratKeteranganActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+
+        textViewDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                // Build an Alert Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(TransaksiActivity.this);
+                builder.setTitle("Hapus Surat Keterangan");
+                builder.setMessage("Apakah anda yakin ingin menghapus surat?");
+                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        // Delete file when user clicked the Yes button
+                        progressDialog = ProgressDialog.show(TransaksiActivity.this, "", "Loading....", true, false);
+
+                        Call<MessageModel> call = APIService.Factory.create().postdeleteSuratKeterangan(id);
+                        call.enqueue(new Callback<MessageModel>() {
+                            @Override
+                            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                                progressDialog.dismiss();
+                                loadAllTsuratketerangan();
+                                Toast.makeText(TransaksiActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<MessageModel> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Log.e("ERROR", t.getMessage());
+                                Toast.makeText(TransaksiActivity.this, "Berhasil menghapus, silahkan refresh layar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+                // Set the alert dialog no button click listener
+                builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do something when No button clicked
+                        Toast.makeText(getApplicationContext(),
+                                "Tidak jadi menghapus",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    @Override
+    public void onTsuratketeranganLongClick(String id) {
 
     }
 }

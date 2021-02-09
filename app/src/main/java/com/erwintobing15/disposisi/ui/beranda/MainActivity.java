@@ -16,12 +16,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.erwintobing15.disposisi.R;
+import com.erwintobing15.disposisi.model.AgendaMouModel;
+import com.erwintobing15.disposisi.model.BastModel;
+import com.erwintobing15.disposisi.model.NodinModel;
+import com.erwintobing15.disposisi.model.PerjanjianKerjasamaModel;
 import com.erwintobing15.disposisi.model.ReferensiModel;
+import com.erwintobing15.disposisi.model.SptjmModel;
+import com.erwintobing15.disposisi.model.SuratKeputusanModel;
+import com.erwintobing15.disposisi.model.SuratKeteranganModel;
 import com.erwintobing15.disposisi.model.SuratPengantarKeluarModel;
 import com.erwintobing15.disposisi.model.SuratMasukUndanganModel;
 import com.erwintobing15.disposisi.model.SuratKeluarModel;
-import com.erwintobing15.disposisi.model.SuratLainModel;
 import com.erwintobing15.disposisi.model.SuratMasukModel;
+import com.erwintobing15.disposisi.model.SuratPerintahModel;
 import com.erwintobing15.disposisi.model.UserModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.ui.referensi.ReferensiActivity;
@@ -250,106 +257,106 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        Call<SuratLainModel.SuratLainDataModel> callSrtPerintah = APIService.Factory.create().allSuratPerintah(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callSrtPerintah.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<SuratPerintahModel.SuratPerintahDataModel> callSrtPerintah = APIService.Factory.create().allSuratPerintah(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callSrtPerintah.enqueue(new Callback<SuratPerintahModel.SuratPerintahDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                List<SuratLainModel> list = response.body().getResults();
+            public void onResponse(Call<SuratPerintahModel.SuratPerintahDataModel> call, Response<SuratPerintahModel.SuratPerintahDataModel> response) {
+                List<SuratPerintahModel> list = response.body().getResults();
                 suratPerintahCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<SuratPerintahModel.SuratPerintahDataModel> call, Throwable t) {
                 suratPerintahCount.setText("0");
             }
         });
 
-        Call<SuratLainModel.SuratLainDataModel> callSrtKeputusan = APIService.Factory.create().allSuratKeputusan(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callSrtKeputusan.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<SuratKeputusanModel.SuratKeputusanDataModel> callSrtKeputusan = APIService.Factory.create().allSuratKeputusan(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callSrtKeputusan.enqueue(new Callback<SuratKeputusanModel.SuratKeputusanDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                List<SuratLainModel> list = response.body().getResults();
+            public void onResponse(Call<SuratKeputusanModel.SuratKeputusanDataModel> call, Response<SuratKeputusanModel.SuratKeputusanDataModel> response) {
+                List<SuratKeputusanModel> list = response.body().getResults();
                 suratKeputusanCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<SuratKeputusanModel.SuratKeputusanDataModel> call, Throwable t) {
                 suratKeputusanCount.setText("0");
             }
         });
 
-        Call<SuratLainModel.SuratLainDataModel> callNodin = APIService.Factory.create().allNodin(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callNodin.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<NodinModel.NodinDataModel> callNodin = APIService.Factory.create().allNodin(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callNodin.enqueue(new Callback<NodinModel.NodinDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                List<SuratLainModel> list = response.body().getResults();
+            public void onResponse(Call<NodinModel.NodinDataModel> call, Response<NodinModel.NodinDataModel> response) {
+                List<NodinModel> list = response.body().getResults();
                 nodinCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<NodinModel.NodinDataModel> call, Throwable t) {
                 nodinCount.setText("0");
             }
         });
 
-        Call<SuratLainModel.SuratLainDataModel> callPerjanjianKerjasama = APIService.Factory.create().allPerjanjianKerjasama(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callPerjanjianKerjasama.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel> callPerjanjianKerjasama = APIService.Factory.create().allPerjanjianKerjasama(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callPerjanjianKerjasama.enqueue(new Callback<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                List<SuratLainModel> list = response.body().getResults();
+            public void onResponse(Call<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel> call, Response<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel> response) {
+                List<PerjanjianKerjasamaModel> list = response.body().getResults();
                 perjanjianKerjasamaCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel> call, Throwable t) {
                 perjanjianKerjasamaCount.setText("0");
             }
         });
 
-        Call<SuratLainModel.SuratLainDataModel> callAgendaMou = APIService.Factory.create().allAgendaMou(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callAgendaMou.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<AgendaMouModel.AgendaMouDataModel> callAgendaMou = APIService.Factory.create().allAgendaMou(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callAgendaMou.enqueue(new Callback<AgendaMouModel.AgendaMouDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                List<SuratLainModel> list = response.body().getResults();
+            public void onResponse(Call<AgendaMouModel.AgendaMouDataModel> call, Response<AgendaMouModel.AgendaMouDataModel> response) {
+                List<AgendaMouModel> list = response.body().getResults();
                 agendaMouCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<AgendaMouModel.AgendaMouDataModel> call, Throwable t) {
                 agendaMouCount.setText("0");
             }
         });
 
-        Call<SuratLainModel.SuratLainDataModel> callSptjm = APIService.Factory.create().allSptjm(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callSptjm.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<SptjmModel.SptjmDataModel> callSptjm = APIService.Factory.create().allSptjm(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callSptjm.enqueue(new Callback<SptjmModel.SptjmDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                List<SuratLainModel> list = response.body().getResults();
+            public void onResponse(Call<SptjmModel.SptjmDataModel> call, Response<SptjmModel.SptjmDataModel> response) {
+                List<SptjmModel> list = response.body().getResults();
                 sptjmCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<SptjmModel.SptjmDataModel> call, Throwable t) {
                 sptjmCount.setText("0");
             }
         });
 
-        Call<SuratLainModel.SuratLainDataModel> callBast = APIService.Factory.create().allBast(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callBast.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<BastModel.BastDataModel> callBast = APIService.Factory.create().allBast(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callBast.enqueue(new Callback<BastModel.BastDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                List<SuratLainModel> list = response.body().getResults();
+            public void onResponse(Call<BastModel.BastDataModel> call, Response<BastModel.BastDataModel> response) {
+                List<BastModel> list = response.body().getResults();
                 bastCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<BastModel.BastDataModel> call, Throwable t) {
                 bastCount.setText("0");
             }
         });
 
-        Call<SuratLainModel.SuratLainDataModel> callSuratKeterangan = APIService.Factory.create().allSuratKeterangan(SessionUtils.getLoggedUser(MainActivity.this).getId());
-        callSuratKeterangan.enqueue(new Callback<SuratLainModel.SuratLainDataModel>() {
+        Call<SuratKeteranganModel.SuratKeteranganDataModel> callSuratKeterangan = APIService.Factory.create().allSuratKeterangan(SessionUtils.getLoggedUser(MainActivity.this).getId());
+        callSuratKeterangan.enqueue(new Callback<SuratKeteranganModel.SuratKeteranganDataModel>() {
             @Override
-            public void onResponse(Call<SuratLainModel.SuratLainDataModel> call, Response<SuratLainModel.SuratLainDataModel> response) {
-                List<SuratLainModel> list = response.body().getResults();
+            public void onResponse(Call<SuratKeteranganModel.SuratKeteranganDataModel> call, Response<SuratKeteranganModel.SuratKeteranganDataModel> response) {
+                List<SuratKeteranganModel> list = response.body().getResults();
                 suratKeteranganCount.setText(String.valueOf(list.size()));
             }
             @Override
-            public void onFailure(Call<SuratLainModel.SuratLainDataModel> call, Throwable t) {
+            public void onFailure(Call<SuratKeteranganModel.SuratKeteranganDataModel> call, Throwable t) {
                 suratKeteranganCount.setText("0");
             }
         });

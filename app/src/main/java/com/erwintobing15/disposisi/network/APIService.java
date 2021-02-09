@@ -1,19 +1,33 @@
 package com.erwintobing15.disposisi.network;
 
 import com.erwintobing15.disposisi.config.Constants;
+import com.erwintobing15.disposisi.model.AgendaMouModel;
+import com.erwintobing15.disposisi.model.BastModel;
 import com.erwintobing15.disposisi.model.MessageModel;
+import com.erwintobing15.disposisi.model.NodinModel;
+import com.erwintobing15.disposisi.model.PerjanjianKerjasamaModel;
 import com.erwintobing15.disposisi.model.ReferensiModel;
+import com.erwintobing15.disposisi.model.SelectAgendaMouModel;
+import com.erwintobing15.disposisi.model.SelectBastModel;
+import com.erwintobing15.disposisi.model.SelectNodinModel;
+import com.erwintobing15.disposisi.model.SelectPerjanjianKerjasamaModel;
+import com.erwintobing15.disposisi.model.SelectSptjmModel;
+import com.erwintobing15.disposisi.model.SelectSuratKeputusanModel;
+import com.erwintobing15.disposisi.model.SelectSuratKeteranganModel;
+import com.erwintobing15.disposisi.model.SelectSuratPerintahModel;
+import com.erwintobing15.disposisi.model.SptjmModel;
+import com.erwintobing15.disposisi.model.SuratKeputusanModel;
+import com.erwintobing15.disposisi.model.SuratKeteranganModel;
 import com.erwintobing15.disposisi.model.SuratPengantarKeluarModel;
 import com.erwintobing15.disposisi.model.SuratMasukUndanganModel;
 import com.erwintobing15.disposisi.model.SelectReferensiModel;
 import com.erwintobing15.disposisi.model.SelectSuratPengantarKeluarModel;
 import com.erwintobing15.disposisi.model.SelectSuratMasukUndanganModel;
 import com.erwintobing15.disposisi.model.SelectSuratKeluarModel;
-import com.erwintobing15.disposisi.model.SelectSuratLainModel;
 import com.erwintobing15.disposisi.model.SelectSuratMasukModel;
 import com.erwintobing15.disposisi.model.SuratKeluarModel;
-import com.erwintobing15.disposisi.model.SuratLainModel;
 import com.erwintobing15.disposisi.model.SuratMasukModel;
+import com.erwintobing15.disposisi.model.SuratPerintahModel;
 import com.erwintobing15.disposisi.model.UserModel;
 
 import java.util.concurrent.TimeUnit;
@@ -222,7 +236,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/suratperintah/allSuratPerintah.php")
-    Call<SuratLainModel.SuratLainDataModel> allSuratPerintah(@Field("id") String id);
+    Call<SuratPerintahModel.SuratPerintahDataModel> allSuratPerintah(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/suratperintah/insertSuratPerintah.php")
@@ -241,7 +255,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/suratperintah/oneSuratPerintah.php")
-    Call<SelectSuratLainModel> oneSuratPerintah(@Field("id") String id);
+    Call<SelectSuratPerintahModel> oneSuratPerintah(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/suratperintah/updateSuratPerintah.php")
@@ -261,7 +275,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/suratkeputusan/allSuratKeputusan.php")
-    Call<SuratLainModel.SuratLainDataModel> allSuratKeputusan(@Field("id") String id);
+    Call<SuratKeputusanModel.SuratKeputusanDataModel> allSuratKeputusan(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/suratkeputusan/insertSuratKeputusan.php")
@@ -280,7 +294,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/suratkeputusan/oneSuratKeputusan.php")
-    Call<SelectSuratLainModel> oneSuratKeputusan(@Field("id") String id);
+    Call<SelectSuratKeputusanModel> oneSuratKeputusan(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/suratkeputusan/updateSuratKeputusan.php")
@@ -300,7 +314,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/nodin/allNodin.php")
-    Call<SuratLainModel.SuratLainDataModel> allNodin(@Field("id") String id);
+    Call<NodinModel.NodinDataModel> allNodin(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/nodin/insertNodin.php")
@@ -319,7 +333,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/nodin/oneNodin.php")
-    Call<SelectSuratLainModel> oneNodin(@Field("id") String id);
+    Call<SelectNodinModel> oneNodin(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/nodin/updateNodin.php")
@@ -339,7 +353,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/perjanjiankerjasama/allPerjanjianKerjasama.php")
-    Call<SuratLainModel.SuratLainDataModel> allPerjanjianKerjasama(@Field("id") String id);
+    Call<PerjanjianKerjasamaModel.PerjanjianKerjasamaDataModel> allPerjanjianKerjasama(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/perjanjiankerjasama/insertPerjanjianKerjasama.php")
@@ -358,7 +372,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/perjanjiankerjasama/onePerjanjianKerjasama.php")
-    Call<SelectSuratLainModel> onePerjanjianKerjasama(@Field("id") String id);
+    Call<SelectPerjanjianKerjasamaModel> onePerjanjianKerjasama(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/perjanjiankerjasama/updatePerjanjianKerjasama.php")
@@ -378,7 +392,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/agendamou/allAgendaMou.php")
-    Call<SuratLainModel.SuratLainDataModel> allAgendaMou(@Field("id") String id);
+    Call<AgendaMouModel.AgendaMouDataModel> allAgendaMou(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/agendamou/insertAgendaMou.php")
@@ -397,7 +411,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/agendamou/oneAgendaMou.php")
-    Call<SelectSuratLainModel> oneAgendaMou(@Field("id") String id);
+    Call<SelectAgendaMouModel> oneAgendaMou(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/agendamou/updateAgendaMou.php")
@@ -417,7 +431,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/sptjm/allSptjm.php")
-    Call<SuratLainModel.SuratLainDataModel> allSptjm(@Field("id") String id);
+    Call<SptjmModel.SptjmDataModel> allSptjm(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/sptjm/insertSptjm.php")
@@ -436,7 +450,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/sptjm/oneSptjm.php")
-    Call<SelectSuratLainModel> oneSptjm(@Field("id") String id);
+    Call<SelectSptjmModel> oneSptjm(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/sptjm/updateSptjm.php")
@@ -456,7 +470,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/bast/allBast.php")
-    Call<SuratLainModel.SuratLainDataModel> allBast(@Field("id") String id);
+    Call<BastModel.BastDataModel> allBast(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/bast/insertBast.php")
@@ -475,7 +489,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/bast/oneBast.php")
-    Call<SelectSuratLainModel> oneBast(@Field("id") String id);
+    Call<SelectBastModel> oneBast(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/bast/updateBast.php")
@@ -495,7 +509,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/suratketerangan/allSuratKeterangan.php")
-    Call<SuratLainModel.SuratLainDataModel> allSuratKeterangan(@Field("id") String id);
+    Call<SuratKeteranganModel.SuratKeteranganDataModel> allSuratKeterangan(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/suratketerangan/insertSuratKeterangan.php")
@@ -514,7 +528,7 @@ public interface APIService {
 
     @FormUrlEncoded
     @POST("api/transaksi/suratketerangan/oneSuratKeterangan.php")
-    Call<SelectSuratLainModel> oneSuratKeterangan(@Field("id") String id);
+    Call<SelectSuratKeteranganModel> oneSuratKeterangan(@Field("id") String id);
 
     @Multipart
     @POST("api/transaksi/suratketerangan/updateSuratKeterangan.php")
