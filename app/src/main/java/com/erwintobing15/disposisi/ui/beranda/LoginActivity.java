@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.erwintobing15.disposisi.R;
-import com.erwintobing15.disposisi.model.UserModel;
+import com.erwintobing15.disposisi.model.user.UserModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.util.SessionUtils;
 

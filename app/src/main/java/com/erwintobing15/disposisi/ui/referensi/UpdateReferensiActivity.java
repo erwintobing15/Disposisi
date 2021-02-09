@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.erwintobing15.disposisi.R;
-import com.erwintobing15.disposisi.model.MessageModel;
-import com.erwintobing15.disposisi.model.SelectReferensiModel;
+import com.erwintobing15.disposisi.model.message.MessageModel;
+import com.erwintobing15.disposisi.model.referensi.SelectReferensiModel;
 import com.erwintobing15.disposisi.network.APIService;
 
 import java.util.Objects;

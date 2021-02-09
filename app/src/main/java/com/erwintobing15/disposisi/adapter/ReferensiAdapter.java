@@ -11,8 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.erwintobing15.disposisi.R;
-import com.erwintobing15.disposisi.model.ReferensiModel;
-import com.erwintobing15.disposisi.model.SuratMasukModel;
+import com.erwintobing15.disposisi.model.referensi.ReferensiModel;
 
 import java.util.List;
 

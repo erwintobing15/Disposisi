@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.erwintobing15.disposisi.R;
-import com.erwintobing15.disposisi.model.MessageModel;
+import com.erwintobing15.disposisi.model.message.MessageModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.util.SessionUtils;
 

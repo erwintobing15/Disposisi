@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
-import com.erwintobing15.disposisi.model.BastModel;
+import com.erwintobing15.disposisi.model.bast.BastModel;
 
 import java.util.List;
 

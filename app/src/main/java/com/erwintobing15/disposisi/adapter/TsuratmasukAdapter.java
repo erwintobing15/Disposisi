@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
-import com.erwintobing15.disposisi.model.SuratMasukModel;
+import com.erwintobing15.disposisi.model.suratmasuk.SuratMasukModel;
 
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;

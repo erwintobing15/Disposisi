@@ -28,7 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.erwintobing15.disposisi.R;
-import com.erwintobing15.disposisi.model.MessageModel;
+import com.erwintobing15.disposisi.model.message.MessageModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.util.FileUtil;
 import com.erwintobing15.disposisi.util.Imageutils;

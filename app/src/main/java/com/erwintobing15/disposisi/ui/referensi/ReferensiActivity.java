@@ -28,8 +28,8 @@ import android.widget.Toast;
 
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.adapter.ReferensiAdapter;
-import com.erwintobing15.disposisi.model.MessageModel;
-import com.erwintobing15.disposisi.model.ReferensiModel;
+import com.erwintobing15.disposisi.model.message.MessageModel;
+import com.erwintobing15.disposisi.model.referensi.ReferensiModel;
 import com.erwintobing15.disposisi.network.APIService;
 import com.erwintobing15.disposisi.ui.beranda.LoginActivity;
 import com.erwintobing15.disposisi.ui.beranda.MainActivity;

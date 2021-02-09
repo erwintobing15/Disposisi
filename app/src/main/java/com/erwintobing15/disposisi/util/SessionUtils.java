@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.erwintobing15.disposisi.config.Constants;
-import com.erwintobing15.disposisi.model.UserModel;
+import com.erwintobing15.disposisi.model.user.UserModel;
 import com.google.gson.Gson;
 
 public class SessionUtils {
