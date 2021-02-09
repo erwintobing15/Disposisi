@@ -14,7 +14,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.suratmasuk.SuratMasukModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,7 +49,7 @@ public class TsuratmasukAdapter extends RecyclerView.Adapter<TsuratmasukAdapter.
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tsuratmasukViewHolder.circleImageView);
 
-        tsuratmasukViewHolder.tglDiterima.setText(model.getTgl_diterima());
+        tsuratmasukViewHolder.tglDiterima.setText(DateUtil.formatDate(model.getTgl_diterima()));
         tsuratmasukViewHolder.isiSurat.setText(model.getIsi());
         tsuratmasukViewHolder.asalSurat.setText(model.getAsal_surat());
 
@@ -105,5 +110,13 @@ public class TsuratmasukAdapter extends RecyclerView.Adapter<TsuratmasukAdapter.
 
         void onTsuratmasukLongClick(String id);
     }
+
+    // return date with format : 24 Jul 2020
+//    private static String formatDate(String date) {
+//        LocalDate d = LocalDate.parse(date);
+//        SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy");
+//        String dateStamp = formatter.format(d);
+//        return dateStamp;
+//    }
 
 }

@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.bast.BastModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class TbastAdapter extends RecyclerView.Adapter<TbastAdapter.TbastViewHol
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tbastViewHolder.circleImageView);
 
-        tbastViewHolder.tglDiterima.setText(model.getTgl_catat());
+        tbastViewHolder.tglDiterima.setText(DateUtil.formatDate(model.getTgl_catat()));
         tbastViewHolder.isiSurat.setText(model.getIsi());
         tbastViewHolder.tujuanSurat.setText(model.getTujuan());
 

@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.sptjm.SptjmModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class TsptjmAdapter extends RecyclerView.Adapter<TsptjmAdapter.TsptjmView
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tsptjmViewHolder.circleImageView);
 
-        tsptjmViewHolder.tglDiterima.setText(model.getTgl_catat());
+        tsptjmViewHolder.tglDiterima.setText(DateUtil.formatDate(model.getTgl_catat()));
         tsptjmViewHolder.isiSurat.setText(model.getIsi());
         tsptjmViewHolder.tujuanSurat.setText(model.getTujuan());
 

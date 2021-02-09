@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.suratperintah.SuratPerintahModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class TsuratperintahAdapter extends RecyclerView.Adapter<TsuratperintahAd
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tsuratperintahViewHolder.circleImageView);
 
-        tsuratperintahViewHolder.tglDiterima.setText(model.getTgl_catat());
+        tsuratperintahViewHolder.tglDiterima.setText(DateUtil.formatDate(model.getTgl_catat()));
         tsuratperintahViewHolder.isiSurat.setText(model.getIsi());
         tsuratperintahViewHolder.tujuanSurat.setText(model.getTujuan());
 

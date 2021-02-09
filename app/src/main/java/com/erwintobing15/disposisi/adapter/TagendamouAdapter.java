@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.agendamou.AgendaMouModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class TagendamouAdapter extends RecyclerView.Adapter<TagendamouAdapter.Ta
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tagendamouViewHolder.circleImageView);
 
-        tagendamouViewHolder.tglDiterima.setText(model.getTgl_catat());
+        tagendamouViewHolder.tglDiterima.setText(DateUtil.formatDate(model.getTgl_catat()));
         tagendamouViewHolder.isiSurat.setText(model.getIsi());
         tagendamouViewHolder.tujuanSurat.setText(model.getTujuan());
 

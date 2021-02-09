@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.nodin.NodinModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class TnodinAdapter extends RecyclerView.Adapter<TnodinAdapter.TnodinView
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tnodinViewHolder.circleImageView);
 
-        tnodinViewHolder.tglDiterima.setText(model.getTgl_catat());
+        tnodinViewHolder.tglDiterima.setText(DateUtil.formatDate(model.getTgl_catat()));
         tnodinViewHolder.isiSurat.setText(model.getIsi());
         tnodinViewHolder.tujuanSurat.setText(model.getTujuan());
 

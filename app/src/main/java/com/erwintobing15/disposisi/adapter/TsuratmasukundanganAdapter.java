@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.suratmasukundangan.SuratMasukUndanganModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class TsuratmasukundanganAdapter extends RecyclerView.Adapter<Tsuratmasuk
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tsmasukViewHolder.circleImageView);
 
-        tsmasukViewHolder.tglCatat.setText(model.getTgl_catat());
+        tsmasukViewHolder.tglCatat.setText(DateUtil.formatDate(model.getTgl_catat()));
         tsmasukViewHolder.isiSurat.setText(model.getIsi());
         tsmasukViewHolder.asalSurat.setText(model.getAsal_surat());
 

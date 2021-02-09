@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.suratpengantarkeluar.SuratPengantarKeluarModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -52,7 +53,7 @@ public class TsuratpengantarkeluarAdapter extends RecyclerView.Adapter<Tsuratpen
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tspkeluarViewHolder.circleImageView);
 
-        tspkeluarViewHolder.tglCatat.setText(model.getTgl_catat());
+        tspkeluarViewHolder.tglCatat.setText(DateUtil.formatDate(model.getTgl_catat()));
         tspkeluarViewHolder.isiSurat.setText(model.getIsi());
         tspkeluarViewHolder.tujuanSurat.setText(model.getTujuan());
 

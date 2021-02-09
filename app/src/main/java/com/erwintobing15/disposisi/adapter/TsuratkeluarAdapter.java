@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.suratkeluar.SuratKeluarModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,7 +47,7 @@ public class TsuratkeluarAdapter extends RecyclerView.Adapter<TsuratkeluarAdapte
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tsuratkeluarViewHolder.circleImageView);
 
-        tsuratkeluarViewHolder.tglDiterima.setText(model.getTgl_catat());
+        tsuratkeluarViewHolder.tglDiterima.setText(DateUtil.formatDate(model.getTgl_catat()));
         tsuratkeluarViewHolder.isiSurat.setText(model.getIsi());
         tsuratkeluarViewHolder.tujuanSurat.setText(model.getTujuan());
 

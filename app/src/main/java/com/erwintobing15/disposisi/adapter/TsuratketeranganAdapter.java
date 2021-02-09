@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.erwintobing15.disposisi.R;
 import com.erwintobing15.disposisi.config.Constants;
 import com.erwintobing15.disposisi.model.suratketerangan.SuratKeteranganModel;
+import com.erwintobing15.disposisi.util.DateUtil;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class TsuratketeranganAdapter extends RecyclerView.Adapter<Tsuratketerang
                 .apply(new RequestOptions().error(R.drawable.doc))
                 .into(tsuratketeranganViewHolder.circleImageView);
 
-        tsuratketeranganViewHolder.tglDiterima.setText(model.getTgl_catat());
+        tsuratketeranganViewHolder.tglDiterima.setText(DateUtil.formatDate(model.getTgl_catat()));
         tsuratketeranganViewHolder.isiSurat.setText(model.getIsi());
         tsuratketeranganViewHolder.tujuanSurat.setText(model.getTujuan());
 
