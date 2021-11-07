@@ -1,7 +1,5 @@
 # Disposisi
 
-## Introduction
-
 > Disposisi is an android application for managing letters. This is a project I created for my volunteer work in BNNK Bandung. I created this application as per their request to create a mobile version of an existing web that in developed then. So I created the web service too, to integrate with MySQL database. The application is created using java and android studio.
 
 ## Screenshoot
@@ -11,6 +9,7 @@
         <td valign="top"><img src="../assets/dashboard.jpg"></td>
         <td valign="top"><img src="../assets/surat.jpg"></td>
     </tr>
+    <br/>
     <tr>
         <td valign="top"><img src="../assets/add.jpg"></td>
         <td valign="top"><img src="../assets/delete.jpg"></td>
