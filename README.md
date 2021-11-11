@@ -20,6 +20,7 @@
 ## Technologies 
 * Java
 * Android Studio
+* Retrofit
 
 ## Features
 * Save a important info of a new letter 
